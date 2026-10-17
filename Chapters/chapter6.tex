@@ -34,7 +34,7 @@ motion-planning question this chapter answers is settled.
 \section{System Architecture and Vision-Based Perception}\label{sec:iapf_architecture}
 %% ============================================================
 
-The iAPF framework was developed and validated on the same two-Kinova-Gen3-Lite cell used
+The iAPF framework was developed and validated on the same dual-arm Kinova Gen3 Lite cell used
 throughout this thesis, augmented with a single globally mounted Intel RealSense D415 RGB-D camera.
 Figure~\ref{fig:iapf_overall} summarizes the four components this chapter develops: inter-arm
 distance calculation from forward kinematics, the three-way force equilibrium for collision
@@ -57,7 +57,7 @@ the camera is calibrated relative to the right arm's base, $T^{B_R}_{C}$, and th
 related to the left by $T^{B_L}_{B_R}$, so that an object detected in the camera frame reaches the
 shared reference frame by the same chained composition used throughout this thesis:
 \begin{equation}
-p^{B_L} = T^{B_L}_{B_R}\, T^{B_R}_{C}\, p^{C}.
+\mathbf{p}^{B_L} = T^{B_L}_{B_R}\, T^{B_R}_{C}\, \mathbf{p}^{C}.
 \label{eq:iapf_objecttransform}
 \end{equation}
 
@@ -151,22 +151,22 @@ iAPF retains the classical APF's reactive, gradient-like structure~\citep{khatib
 replacing each of its components: an exponential goal attraction, a continuous inverse-distance
 inter-arm repulsion, and an exponential home-seeking force together form the three-way equilibrium
 that gives the controller its name, stabilized by a fourth, velocity-dependent damping term. Let
-$p_{ee}^\alpha$ denote the end-effector position of arm $\alpha \in \{L, R\}$ in the shared reference
-frame $B_L$, and let $g$ denote a target's position from Section~\ref{sec:iapf_architecture}. The
+$\mathbf{p}_{ee}^\alpha$ denote the end-effector position of arm $\alpha \in \{L, R\}$ in the shared reference
+frame $B_L$, and let $\mathbf{g}$ denote a target's position from Section~\ref{sec:iapf_architecture}. The
 goal attraction force grows exponentially with distance rather than linearly, giving sub-linear
 growth near the goal for gentle convergence and super-linear growth far from it for a faster
 approach, without gain scheduling:
 \begin{equation}
-\vec{f}_{\text{att}}(p_{ee}^\alpha, g) = k_a \left( e^{\lVert e \rVert} - 1 \right) \hat{e}, \qquad
-e = g - p_{ee}^\alpha,\; \hat{e} = \frac{e}{\lVert e \rVert}.
+\mathbf{f}_{\text{att}}(\mathbf{p}_{ee}^\alpha, \mathbf{g}) = k_a \left( e^{\lVert \mathbf{e} \rVert} - 1 \right) \hat{\mathbf{e}}, \qquad
+\mathbf{e} = \mathbf{g} - \mathbf{p}_{ee}^\alpha,\; \hat{\mathbf{e}} = \frac{\mathbf{e}}{\lVert \mathbf{e} \rVert}.
 \label{eq:iapf_attract}
 \end{equation}
 The inter-arm repulsive force uses a continuous inverse-distance law, smooth and non-zero at every
 finite separation rather than switching on abruptly at a fixed cutoff radius as the classical
 formulation does:
 \begin{equation}
-\vec{f}_{\text{rep}}(p_{ee}^L, p_{ee}^R) = k_r \frac{1}{d_{\min}^{\eta}}\, \hat{r}, \qquad
-\hat{r} = \frac{p_{ee}^R - p_{ee}^L}{\lVert p_{ee}^R - p_{ee}^L \rVert},
+\mathbf{f}_{\text{rep}}(\mathbf{p}_{ee}^L, \mathbf{p}_{ee}^R) = k_r \frac{1}{d_{\min}^{\eta}}\, \hat{\mathbf{r}}, \qquad
+\hat{\mathbf{r}} = \frac{\mathbf{p}_{ee}^R - \mathbf{p}_{ee}^L}{\lVert \mathbf{p}_{ee}^R - \mathbf{p}_{ee}^L \rVert},
 \label{eq:iapf_repel}
 \end{equation}
 where $d_{\min} = \min(D_{\text{inter}})$ is exactly the minimum inter-arm link distance of
@@ -174,23 +174,23 @@ Equation~\eqref{eq:dm_interarm} from Chapter~\ref{chap:distance}, computed once 
 from the closed-form line-segment distances of Section~\ref{sec:dm_distance}. The home-seeking
 force is the novel addition beyond the classical two-force formulation: it uses the same exponential
 form as attraction to draw an idle or displaced arm back toward a predefined safe position
-$h_\alpha$,
+$\mathbf{h}_\alpha$,
 \begin{equation}
-\vec{f}_{\text{home}}(p_{ee}^\alpha, h_\alpha) = k_h \left( e^{\lVert e_h \rVert} - 1 \right) \hat{e}_h,
-\qquad e_h = h_\alpha - p_{ee}^\alpha,
+\mathbf{f}_{\text{home}}(\mathbf{p}_{ee}^\alpha, \mathbf{h}_\alpha) = k_h \left( e^{\lVert \mathbf{e}_h \rVert} - 1 \right) \hat{\mathbf{e}}_h,
+\qquad \mathbf{e}_h = \mathbf{h}_\alpha - \mathbf{p}_{ee}^\alpha,
 \label{eq:iapf_home}
 \end{equation}
 and, as demonstrated in Section~\ref{sec:iapf_validation}, is what prevents the oscillation and
 excessive arm extension that the two-force formulation alone exhibits near simultaneous goal
 conflicts. Velocity damping opposes the arm's own motion,
 \begin{equation}
-\vec{f}_{\text{damp}}(\vec{v}_\alpha) = -k_d\, \vec{v}_\alpha,
+\mathbf{f}_{\text{damp}}(\mathbf{v}_\alpha) = -k_d\, \mathbf{v}_\alpha,
 \label{eq:iapf_damp}
 \end{equation}
 and the resultant force combines all four components,
 \begin{equation}
-\vec{f}_{\text{resultant}} = \vec{f}_{\text{att}} + \vec{f}_{\text{rep}} + \vec{f}_{\text{home}}
-- k_d\, \vec{v},
+\mathbf{f}_{\text{resultant}} = \mathbf{f}_{\text{att}} + \mathbf{f}_{\text{rep}} + \mathbf{f}_{\text{home}}
+- k_d\, \mathbf{v},
 \label{eq:iapf_resultant}
 \end{equation}
 with $k_a, k_r, k_h, k_d > 0$ gain constants and $\eta$ the repulsion decay exponent.
@@ -202,11 +202,11 @@ with $k_a, k_r, k_h, k_d > 0$ gain constants and $\eta$ the repulsion decay expo
 The resultant force of Equation~\eqref{eq:iapf_resultant} is converted directly to a commanded
 Cartesian velocity by a single scaling factor,
 \begin{equation}
-\vec{v}_k = \frac{\left(\vec{f}_{\text{resultant}}\right)_k}{s}, \qquad k \in \{L, R\},
+\mathbf{v}_k = \frac{\left(\mathbf{f}_{\text{resultant}}\right)_k}{s}, \qquad k \in \{L, R\},
 \label{eq:iapf_velocity}
 \end{equation}
-so that the manipulator's kinematic state evolves as $\dot{x} = v = k_v\, \vec{f}_{\text{resultant}}(x)$
-for end-effector position $x \in \mathbb{R}^3$ and scalar $k_v = 1/s$, the closed-loop system whose
+so that the manipulator's kinematic state evolves as $\dot{\mathbf{x}} = \mathbf{v} = k_v\, \mathbf{f}_{\text{resultant}}(\mathbf{x})$
+for end-effector position $\mathbf{x} \in \mathbb{R}^3$ and scalar $k_v = 1/s$, the closed-loop system whose
 behavior Section~\ref{sec:iapf_validation} validates experimentally.
 
 Orientation is controlled in parallel. The current end-effector orientation
@@ -222,7 +222,7 @@ R_e = R_d R_c^{-1} \in SO(3),
 expressed in axis-angle form, error angle $\theta \in \mathbb{R}$ about axis
 $\mathbf{k} = [k_x, k_y, k_z]$. The PD control law for angular velocity is
 \begin{equation}
-\vec{\omega} = K_p \cdot \theta \cdot \mathbf{k} + K_d \cdot \frac{d}{dt}(\theta \cdot \mathbf{k}),
+\boldsymbol{\omega} = K_p \cdot \theta \cdot \mathbf{k} + K_d \cdot \frac{d}{dt}(\theta \cdot \mathbf{k}),
 \label{eq:iapf_angular}
 \end{equation}
 with $K_p, K_d \in \mathbb{R}^{3 \times 3}$ diagonal gain matrices. Equations~\eqref{eq:iapf_velocity}
@@ -255,8 +255,8 @@ assignment~\citep{surya2025iapf}.}
 Each arm cycles through IDLE, PICK, PICK\_LOCK, GRIP, PLACE, PLACE\_LOCK, UNGRIP, and DONE states.
 PICK\_LOCK, GRIP, PLACE\_LOCK, and UNGRIP are the critical states, in which precision matters more
 than collision avoidance: on entering one of them, the task-adaptive weights of
-Equation~\eqref{eq:iapf_resultant}'s implicit coefficients are set so that $\vec{f}_{\text{rep}}$
-and $\vec{f}_{\text{home}}$ are switched off entirely, leaving only goal attraction and damping to
+Equation~\eqref{eq:iapf_resultant}'s implicit coefficients are set so that $\mathbf{f}_{\text{rep}}$
+and $\mathbf{f}_{\text{home}}$ are switched off entirely, leaving only goal attraction and damping to
 drive the final approach undisturbed by the other arm's motion. Outside the critical states, both
 forces remain active. When both arms are simultaneously in PICK, or simultaneously in PLACE, a
 priority mechanism compares their remaining distance to target and locks the closer arm into its

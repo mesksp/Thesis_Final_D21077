@@ -38,21 +38,21 @@ For each object type $\tau \in \{\text{nut}, \text{bolt}\}$ and each idle arm $\
 the system selects the closest detected object of that type to the arm's current end-effector
 position:
 \begin{equation}
-i^*, p^*, d^* = \arg\min_{i \in O_\tau} \left\lVert p_{ee}^\alpha - p^{B_L}_i \right\rVert_2,
+i^*, \mathbf{p}^*, d^* = \arg\min_{i \in O_\tau} \left\lVert \mathbf{p}_{ee}^\alpha - \mathbf{p}^{B_L}_i \right\rVert_2,
 \label{eq:cta_selection}
 \end{equation}
-where $O_\tau$ is the set of currently detected objects of type $\tau$ and $p_i^{B_L}$ is object
+where $O_\tau$ is the set of currently detected objects of type $\tau$ and $\mathbf{p}_i^{B_L}$ is object
 $i$'s position from Section~\ref{sec:iapf_architecture}. A candidate object must also satisfy a
 reachability constraint before it can be proposed:
 \begin{equation}
-\psi(\alpha, p) =
+\psi(\alpha, \mathbf{p}) =
 \begin{cases}
-1, & \lVert p - p_{\text{origin}}^\alpha \rVert_2 < 0.5\,\text{m}, \\
+1, & \lVert \mathbf{p} - \mathbf{p}_{\text{origin}}^\alpha \rVert_2 < 0.5\,\text{m}, \\
 0, & \text{otherwise},
 \end{cases}
 \label{eq:cta_reachability}
 \end{equation}
-where $p_{\text{origin}}^\alpha$ is arm $\alpha$'s base origin, restricting proposals to a $0.5$\,m
+where $\mathbf{p}_{\text{origin}}^\alpha$ is arm $\alpha$'s base origin, restricting proposals to a $0.5$\,m
 workspace radius, the same reachability-style test used in Equation~\eqref{eq:sv_reach}, though here
 a circular rather than axis-aligned box constraint.
 
@@ -63,9 +63,9 @@ a circular rather than axis-aligned box constraint.
 To prevent both arms from committing to the same physical object, a spatial conflict test compares a
 new candidate against every already-assigned target:
 \begin{equation}
-\phi(\tau, \alpha, p) =
+\phi(\tau, \alpha, \mathbf{p}) =
 \begin{cases}
-1, & \exists\, p_{\text{prev}} : \tau_{\text{prev}} = \tau \text{ and } \lVert p_{\text{prev}} - p \rVert_2 < 0.01\,\text{m}, \\
+1, & \exists\, \mathbf{p}_{\text{prev}} : \tau_{\text{prev}} = \tau \text{ and } \lVert \mathbf{p}_{\text{prev}} - \mathbf{p} \rVert_2 < 0.01\,\text{m}, \\
 0, & \text{otherwise},
 \end{cases}
 \label{eq:cta_conflict}
@@ -100,7 +100,7 @@ iAPF controller of Chapter~\ref{chap:iapf}, or waits if none was found:
 \begin{equation}
 E_\alpha =
 \begin{cases}
-\text{execute}(p_{\text{pick}}, p_{\text{drop}}), & S_\alpha \neq \varnothing, \\
+\text{execute}(\mathbf{p}_{\text{pick}}, \mathbf{p}_{\text{drop}}), & S_\alpha \neq \varnothing, \\
 \text{wait}, & \text{otherwise},
 \end{cases}
 \label{eq:cta_execution}
@@ -109,7 +109,7 @@ with the drop location fixed by object type to sort bolts and nuts into separate
 in the original fixed-assignment validation, only now the \emph{picking} arm is decided
 competitively rather than by object type:
 \begin{equation}
-p_{\text{drop}} =
+\mathbf{p}_{\text{drop}} =
 \begin{cases}
 [0, -180, 90]^\top, & \tau = \text{bolt}, \\
 [0, -180, 270]^\top, & \tau = \text{nut},
@@ -128,12 +128,12 @@ proposal window size $n_{\max} = 5$ and detected object count $|O|$, well within
 \label{alg:cta_temporal}
 \begin{algorithmic}[1]
 \STATE \textbf{Init:} $n_\alpha \leftarrow 0$, $\beta_\alpha \leftarrow \text{true}$, $S_\alpha \leftarrow \varnothing$
-\FOR{each detection $(i, \tau, p, \text{size})$ with arm $\alpha$ idle}
-    \STATE $(d^*, p^*) \leftarrow$ closest object of type $\tau$ by Equation~\eqref{eq:cta_selection}
-    \IF{$\psi(\alpha, p^*) = 1$ and $\phi(\tau, \alpha, p^*) = 0$}
+\FOR{each detection $(i, \tau, \mathbf{p}, \text{size})$ with arm $\alpha$ idle}
+    \STATE $(d^*, \mathbf{p}^*) \leftarrow$ closest object of type $\tau$ by Equation~\eqref{eq:cta_selection}
+    \IF{$\psi(\alpha, \mathbf{p}^*) = 1$ and $\phi(\tau, \alpha, \mathbf{p}^*) = 0$}
         \IF{$n_\alpha < 5$}
             \IF{$S_\alpha = \varnothing$ or $\gamma_{\text{upd}}(d^*, d_{\text{prev}}) = 1$}
-                \STATE $S_\alpha \leftarrow (d^*, \text{Object}(\tau, \text{size}, p^*))$
+                \STATE $S_\alpha \leftarrow (d^*, \text{Object}(\tau, \text{size}, \mathbf{p}^*))$
             \ENDIF
             \STATE $n_\alpha \leftarrow n_\alpha + 1$
         \ELSE
@@ -181,13 +181,13 @@ force and then converting to velocity, and reintroduces the task-adaptive weight
 $c_{\text{goal}}, c_{\text{obs}}$ that Section~\ref{sec:iapf_priority} switched between only $0$ and
 $1$ implicitly, now as continuously tunable coefficients on the shared three-way equilibrium:
 \begin{equation}
-\vec{f}_{\text{combined}} = c_{\text{goal}}\, \vec{f}_{\text{att}} + c_{\text{obs}}\, \vec{f}_{\text{rep}}
-+ \vec{f}_{\text{home}} + \vec{f}_{\text{damp}}, \qquad
-\vec{f}_{\text{resultant}} = \frac{\vec{f}_{\text{combined}}}{s}, \qquad
-\vec{v}_\alpha = \frac{\vec{f}_{\text{resultant}}^{\,\alpha}}{s_v},
+\mathbf{f}_{\text{combined}} = c_{\text{goal}}\, \mathbf{f}_{\text{att}} + c_{\text{obs}}\, \mathbf{f}_{\text{rep}}
++ \mathbf{f}_{\text{home}} + \mathbf{f}_{\text{damp}}, \qquad
+\mathbf{f}_{\text{resultant}} = \frac{\mathbf{f}_{\text{combined}}}{s}, \qquad
+\mathbf{v}_\alpha = \frac{\mathbf{f}_{\text{resultant}}^{\,\alpha}}{s_v},
 \label{eq:cta_velocity}
 \end{equation}
-with the right arm's velocity rotated into its own frame, $\vec{v}_R^{\text{arm}} = R^{B_L}_{B_R}\, \vec{v}_R$,
+with the right arm's velocity rotated into its own frame, $\mathbf{v}_R^{\text{arm}} = R^{B_L}_{B_R}\, \mathbf{v}_R$,
 before being sent, and the four force fields themselves, Equations~\eqref{eq:iapf_attract}
 --~\eqref{eq:iapf_damp}, unchanged from Chapter~\ref{chap:iapf}. The weights $c_{\text{goal}}$ and
 $c_{\text{obs}}$ were selected by an ablation over 40 trials, each with ten objects (five nuts, five

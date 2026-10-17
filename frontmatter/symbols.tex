@@ -24,45 +24,53 @@ which that meaning applies.
 \endfoot
 \multicolumn{3}{@{}l}{\textbf{Roman Symbols}} \\
 \midrule
-$\mathbf{q}$ & Joint configuration vector of the manipulator & Ch.~4, 5, 7; App.~A \\
-$\mathbf{Q}$ & Unit quaternion representing an orientation & Ch.~4, 7; App.~A \\
-$J$ & Manipulator Jacobian & Ch.~4; App.~D \\
-$T$ & Homogeneous transformation matrix & Ch.~3--7 \\
-$R$ & Rotation matrix & Ch.~3--7; App.~A \\
+$\mathbf{q}$ & Joint configuration vector of the manipulator & Ch.~4, 5, 8; App.~A, C \\
+$\mathbf{Q}$ & Unit quaternion representing an orientation & Ch.~4, 8; App.~A \\
+$J$ & Manipulator Jacobian & Ch.~4, 8; App.~C \\
+$T$ & Homogeneous transformation matrix & Ch.~3--8 \\
+$R$ & Rotation matrix & Ch.~3--8; App.~A \\
 $R$ (index) & Superscript/subscript label for the RIGHT arm, paired with $L$ for LEFT & Ch.~4, 6 \\
-$\mathbf{p}$ & Cartesian position vector & Ch.~3--7 \\
-$\mathbf{v}$ & Cartesian linear velocity / twist command & Ch.~4, 6 \\
-$\mathbf{e}$ & Pose-error vector, position ($\mathbf{e}_p$) or orientation ($\mathbf{e}_o$) & Ch.~4, 6 \\
-$d$ & Scalar Euclidean distance between two points, segments, or links & Ch.~5, 6; App.~B \\
+$\mathbf{p}$ & Cartesian position vector, including end-effector position $\mathbf{p}_{ee}$ & Ch.~3--8 \\
+$\mathbf{v}$ & Cartesian linear velocity / twist command & Ch.~4, 6, 7 \\
+$\mathbf{e}$ & Pose-error vector, position ($\mathbf{e}_p$) or orientation ($\mathbf{e}_o$); in Ch.~6 the goal-attraction error $\mathbf{g}-\mathbf{p}_{ee}^\alpha$ & Ch.~4, 6, 8 \\
+$\mathbf{f}$ & iAPF force vector ($\mathbf{f}_{\text{att}}, \mathbf{f}_{\text{rep}}, \mathbf{f}_{\text{home}}, \mathbf{f}_{\text{damp}}$) & Ch.~6, 7 \\
+$\mathbf{g}, \mathbf{h}_\alpha$ & Target position and home position of arm $\alpha$ & Ch.~6 \\
+$d$ & Scalar Euclidean distance between two points, segments, or links & Ch.~5, 6, 7; App.~B \\
 $D$ & Chamfer-matching cost between a template and the scene & Ch.~3 \\
 $D$ & Inter-arm / inter-link distance matrix & Ch.~5, 6 \\
 $k$ & Generic index (loop, joint, or summation counter) & throughout \\
 $k_a, k_r, k_h, k_d, k_v$ & iAPF gain constants: attraction, repulsion, home-seeking, damping, velocity scaling & Ch.~6 \\
 $L$ & A line segment, $L_1, L_2$ & Ch.~5; App.~B \\
-$V$ & RL state-value function, $V_\theta(\mathbf{s})$ & Ch.~7 \\
-$N$ & A count: template points (Ch.~3), arms (Ch.~5), or rollout steps $N_{\text{steps}}$ (Ch.~7) & Ch.~3, 5, 7 \\
-$\hat{A}_t$ & Generalized Advantage Estimation advantage estimate & Ch.~7; App.~E \\
+$V$ & RL state-value function, $V_\theta(\mathbf{s})$ & Ch.~8; App.~D \\
+$N$ & A count: template points (Ch.~3), arms (Ch.~5), or rollout steps $N_{\text{steps}}$ (Ch.~8) & Ch.~3, 5, 8 \\
+$\hat{A}_t$ & Generalized Advantage Estimation advantage estimate & Ch.~8; App.~D \\
 $S$ & Centralized-critic global state (prior guided policy) & Ch.~8 \\
-$\mathbf{s}$ & Local agent observation/state & Ch.~7 \\
-$\mathbf{a}$ & Policy action & Ch.~7 \\
-$r$ & Reward & Ch.~7 \\
+$\mathbf{s}$ & Local agent observation/state & Ch.~8; App.~D \\
+$\mathbf{a}$ & Policy action (Ch.~8); in Ch.~5, the start point of a line segment & Ch.~5, 8 \\
+$r$ & Reward & Ch.~8; App.~D \\
 $\mathbf{w}$ & Vector between two line-segment start points, $\mathbf{b}_1-\mathbf{a}_1$ & Ch.~5; App.~B \\
 \multicolumn{3}{@{}l}{\textbf{Greek Symbols}} \\
 \midrule
 $\theta$ & Denavit--Hartenberg joint-angle parameter & Ch.~5; App.~A \\
 $\theta$ & End-effector orientation angle / rotation-error angle (axis-angle form) & Ch.~4, 6; App.~A \\
-$\theta$ & PPO/MAPPO policy parameters, $\pi_\theta$ (unbolded; distinct from the joint vector $\mathbf{q}$) & Ch.~7 \\
+$\theta$ & PPO/MAPPO policy parameters, $\pi_\theta$ (unbolded; distinct from the joint vector $\mathbf{q}$) & Ch.~8; App.~D \\
 $\delta$ & Chamfer-matching pitch angle & Ch.~3 \\
-$\alpha$ & Two-valued arm-index label, $\alpha \in \{L, R\}$ & Ch.~6 \\
+$\delta$ & Swept-volume proximity threshold & Ch.~5 \\
+$\delta_t$ & Temporal-difference residual, $\delta_t = r_{t+1} + \gamma V_\theta(\mathbf{s}_{t+1}) - V_\theta(\mathbf{s}_t)$ & Ch.~8; App.~D \\
+$\phi$ & Rotation-error angle about the unit axis $\hat{\mathbf{u}}$ in the DLS and Velocity QP baselines, used in place of $\theta$ (policy parameters there); bold $\boldsymbol{\phi}_t$ is the task-phase vector & Ch.~8 \\
+$\alpha$ & Two-valued arm-index label, $\alpha \in \{L, R\}$ & Ch.~6, 7 \\
+$\alpha_k$ & Denavit--Hartenberg link-twist parameter & App.~A \\
 $\alpha_t^i$ & Adaptive policy-blending gating scalar of the prior guided policy & Ch.~8 \\
-$\mu(\mathbf{q})$ & Manipulability measure, $\mu(\mathbf{q}) = \sqrt{\det(JJ^\top)}$ & Ch.~4; App.~D \\
-$\lambda$ & Damped-least-squares damping factor & Ch.~4; App.~D \\
-$\lambda$ & GAE weighting parameter & Ch.~7; App.~E \\
-$\gamma$ & RL discount factor & Ch.~7; App.~E \\
-$\eta$ & iAPF repulsive-force decay exponent & Ch.~6; App.~C \\
-$\varepsilon, \epsilon$ & A small numerical tolerance: central-difference step, line-segment classification tolerance, or PPO clip range & Ch.~4, 5, 7; App.~B, E \\
-$\rho_t$ & PPO/MAPPO policy probability ratio & Ch.~7; App.~E \\
-$\pi_\theta$ & Policy function & Ch.~7; App.~E \\
+$\mu(\mathbf{q})$ & Manipulability measure, $\mu(\mathbf{q}) = \sqrt{\det(JJ^\top)}$ & Ch.~4; App.~C \\
+$\mu, \nu$ & Flattened segment indices into the inter-arm distance matrix, $D[\mu,\nu]$ & Ch.~5 \\
+$\rho(\mu)$ & Arm-membership function returning the arm that owns segment $\mu$ (distinct from the PPO ratio $\rho_t$) & Ch.~5 \\
+$\lambda$ & Damped-least-squares damping factor & Ch.~4; App.~C \\
+$\lambda$ & GAE weighting parameter & Ch.~8; App.~D \\
+$\gamma$ & RL discount factor & Ch.~8; App.~D \\
+$\eta$ & iAPF repulsive-force decay exponent & Ch.~6 \\
+$\varepsilon$ & A small numerical tolerance: central-difference step, line-segment classification tolerance, or PPO clip range & Ch.~4, 5, 8; App.~B, D \\
+$\rho_t$ & PPO/MAPPO policy probability ratio & Ch.~8; App.~D \\
+$\pi_\theta$ & Policy function & Ch.~8; App.~D \\
 \multicolumn{3}{@{}l}{\textbf{Other Notation}} \\
 \midrule
 $SO(3)$ & The group of 3-D rotation matrices & Ch.~4, 6; App.~A \\

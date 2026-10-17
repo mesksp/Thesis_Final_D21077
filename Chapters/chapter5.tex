@@ -90,7 +90,7 @@ The flattening map $\varphi$ and its inverse are then
 i = \max\left\{\, q \in \{1,\ldots,N\} \;\middle|\; \sigma_q < \mu \,\right\}, \quad k = \mu - \sigma_i
 \label{phi_inv}
 \end{equation}
-so that $L_\mu \triangleq L_i^k$ where $(i,k) = \varphi^{-1}(\mu)$, and the arm-membership function $\rho(\mu)$ returns the arm index $i$ of segment $\mu$, satisfying $\rho(\varphi(i,k)) \equiv i$. The map $\varphi$ is a bijection onto $\{1,\ldots,M\}$, and the set in Eq.~\ref{phi_inv} is non-empty for every $\mu \geq 1$ because $\sigma_1 = 0$, so $\varphi^{-1}$ is defined on the whole index range. For the dual-arm system of Section.~\ref{sec:dm_dualarm}, $\varphi(1,4) = 4$ addresses left arm joint 4 and $\varphi(2,4) = 10$ addresses right arm joint 4.
+so that $L_\mu \triangleq L_i^k$ where $(i,k) = \varphi^{-1}(\mu)$, and the arm-membership function $\rho(\mu)$ returns the arm index $i$ of segment $\mu$, satisfying $\rho(\varphi(i,k)) \equiv i$. The map $\varphi$ is a bijection onto $\{1,\ldots,M\}$, and the set in Equation~\eqref{phi_inv} is non-empty for every $\mu \geq 1$ because $\sigma_1 = 0$, so $\varphi^{-1}$ is defined on the whole index range. For the dual-arm system of Section.~\ref{sec:dm_dualarm}, $\varphi(1,4) = 4$ addresses left arm joint 4 and $\varphi(2,4) = 10$ addresses right arm joint 4.
 
 %% ============================================================
 \section{Classification of Link Configurations}\label{sec:dm_classification}
@@ -204,7 +204,7 @@ D\left[ \varphi(i,k),\, \varphi(l,n) \right] \quad \text{where } i \neq l,
 \end{equation}
 are evaluated. The element $D[\mu,\nu]$ is the minimum distance between segments $\mu$ and $\nu$, so $D$ acts as a proximity database that can be queried for any inter-arm segment pair without recomputation.
 
-\noindent\textbf{Block Structure:} Grouping the entries of Eq.~\ref{dist_matrix} by arm index yields the inter-arm block
+\noindent\textbf{Block Structure:} Grouping the entries of Equation~\eqref{dist_matrix} by arm index yields the inter-arm block
 \begin{equation}
 D_{il} \in \overline{\mathbf{R}}^{\,m_i \times m_l}, \quad D_{il}[k,n] = d(L_i^{\,k}, L_l^{\,n}), \quad i \neq l
 \label{block_eq}
@@ -214,25 +214,25 @@ so that $D$ admits the partition
 D =
 \begin{bmatrix}
 \boldsymbol{\infty} & D_{12} & \cdots & D_{1N}\\
-D_{12}^{T} & \boldsymbol{\infty} & \cdots & D_{2N}\\
+D_{12}^{\top} & \boldsymbol{\infty} & \cdots & D_{2N}\\
 \vdots & \vdots & \ddots & \vdots\\
-D_{1N}^{T} & D_{2N}^{T} & \cdots & \boldsymbol{\infty}
+D_{1N}^{\top} & D_{2N}^{\top} & \cdots & \boldsymbol{\infty}
 \end{bmatrix}
 \label{block_partition}
 \end{equation}
-with $\binom{N}{2}$ populated upper-triangular blocks and $N$ diagonal blocks filled with the sentinel $+\infty$. The blocks satisfy $D_{li} = D_{il}^{T}$, since $D_{li}[n, k] = d(L_l^{\,n},L_i^{\,k}) = d(L_i^{\,k},L_l^{\,n}) = D_{il}[k,n]$ by the symmetry of $d$; hence only the pairs $i < l$ need be evaluated. The minimum inter-arm distance of the system follows as
+with $\binom{N}{2}$ populated upper-triangular blocks and $N$ diagonal blocks filled with the sentinel $+\infty$. The blocks satisfy $D_{li} = D_{il}^{\top}$, since $D_{li}[n, k] = d(L_l^{\,n},L_i^{\,k}) = d(L_i^{\,k},L_l^{\,n}) = D_{il}[k,n]$ by the symmetry of $d$; hence only the pairs $i < l$ need be evaluated. The minimum inter-arm distance of the system follows as
 \begin{equation}
 d_{\min} = \min_{1 \leq i < l \leq N} \min\left( D_{il} \right) = \min_{\mu,\nu} D[\mu,\nu]
 \label{dmin_eq}
 \end{equation}
-For $N \geq 3$, the individual block minima $\min(D_{il})$ are available per arm pair in addition to the global minimum of Eq.~\ref{dmin_eq}.
+For $N \geq 3$, the individual block minima $\min(D_{il})$ are available per arm pair in addition to the global minimum of Equation~\eqref{dmin_eq}.
 
-\noindent\textbf{Computational Cost:} Forward kinematics is accumulated incrementally at $O(M)$, and every branch of the distance computation terminates in a bounded number of dot and cross products together with one $2\times2$ solve, so the per-pair cost is $O(1)$. The number of evaluated pairs under the constraint of Eq.~\ref{block_eq}, with the block symmetry exploited, is
+\noindent\textbf{Computational Cost:} Forward kinematics is accumulated incrementally at $O(M)$, and every branch of the distance computation terminates in a bounded number of dot and cross products together with one $2\times2$ solve, so the per-pair cost is $O(1)$. The number of evaluated pairs under the constraint of Equation~\eqref{block_eq}, with the block symmetry exploited, is
 \begin{equation}
 P = \sum_{1 \leq i < l \leq N} m_i m_l = \frac{1}{2}\left( M^2 - \sum_{i=1}^{N} m_i^2 \right)
 \label{pair_count}
 \end{equation}
-giving a total cost of $O(M^2) = O(N^2 m^2)$ for equal joint counts. For $N = 2$ and $m = 6$ this evaluates to $P = 36$, matching the block size of Eq.~\ref{eq:dm_interarm}. The cost is independent of the configuration, so the method admits a hard worst-case bound, and all $P$ evaluations are mutually independent and therefore parallelizable.
+giving a total cost of $O(M^2) = O(N^2 m^2)$ for equal joint counts. For $N = 2$ and $m = 6$ this evaluates to $P = 36$, matching the block size of Equation~\eqref{eq:dm_interarm}. The cost is independent of the configuration, so the method admits a hard worst-case bound, and all $P$ evaluations are mutually independent and therefore parallelizable.
 
 
 %% ============================================================

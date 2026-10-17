@@ -31,7 +31,7 @@ conditions under which each is preferable.
 Both pipelines reason about the same four coordinate frames, illustrated in
 Figure~\ref{fig:vp_frames}: the manipulator \textbf{base frame} $B$, fixed at the robot's mounting
 point; the \textbf{camera frame} $C$, fixed at the globally mounted RGB-D sensor; the
-\textbf{gripper frame} $G$, attached to the end effector. Since the camera and the robot base are both stationary and their relative pose is obtained once by extrinsic calibration, the homogeneous transform $T^B_C \in SE(3)$ from the camera frame to the base frame is treated as a known constant throughout this chapter:
+\textbf{gripper frame} $G$, attached to the end-effector. Since the camera and the robot base are both stationary and their relative pose is obtained once by extrinsic calibration, the homogeneous transform $T^B_C \in SE(3)$ from the camera frame to the base frame is treated as a known constant throughout this chapter:
 \begin{equation}
 T^B_C =
 \begin{bmatrix}
@@ -107,7 +107,7 @@ pipelines is how $\mathrm{size}_{px}$ itself is measured from the segmented imag
 
 The first pipeline targets the hardest instance of the sorting problem: bolts of unknown pose,
 overlapping and touching one another inside a bin, with no prior instance segmentation available.
-It was validated in an industrial shop-floor scene built in Gazebo (ROS1) with a globally
+It was validated in an industrial shop-floor scene built in Gazebo (ROS~1) with a globally
 positioned RGB-D camera and a simulated Kinova Gen3 Lite arm, shown in
 Figure~\ref{fig:vp_setup}~\citep{sk2024bolthandling}. Because template matching against a CAD
 model is more tractable than learning a detector for objects with almost no discriminative
@@ -575,7 +575,7 @@ Bolt configuration & Overlapping, arbitrary 3D tilt in a bin & Singulated, prese
 Pose search        & Full $(\theta, \delta)$ Oriented Chamfer Matching & Bounding-box angle $\theta$ from the mask \\
 Size cue           & Contour-to-centroid radius $R$ & Bolt head diameter $D_{px}$ \\
 Sensitivity        & Color segmentation, hence lighting-sensitive & Learned features, robust to bolt aging \\
-Validation platform & Gazebo (ROS1) simulation & Hardware, Kinova Gen3 Lite + RealSense D415 \\
+Validation platform & Gazebo (ROS~1) simulation & Hardware, Kinova Gen3 Lite + RealSense D415 \\
 Position/size error & 0.005\,m RMS / 0.36\,mm RMS & $-1.424$ to $1.655$\,mm \\
 \bottomrule
 \end{tabular}%

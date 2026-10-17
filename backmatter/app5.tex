@@ -80,13 +80,13 @@ constraint, by removing the incentive to move $\rho_t$ far from $1$ once its sig
 direction is already saturated. Consider the two cases of the inner term separately:
 \begin{itemize}
     \item $\hat A_t > 0$ (a better-than-expected action): $L^{\text{CLIP}}$'s per-sample term is
-    $\min\left(\rho_t\hat A_t,\, (1+\epsilon)\hat A_t\right)$, which grows with $\rho_t$ only until
-    $\rho_t = 1+\epsilon$, after which the minimum saturates at the constant
-    $(1+\epsilon)\hat A_t$. Its derivative with respect to $\rho_t$ is therefore zero for $\rho_t >
-    1+\epsilon$, removing the gradient signal that would otherwise keep increasing the action's
+    $\min\left(\rho_t\hat A_t,\, (1+\varepsilon)\hat A_t\right)$, which grows with $\rho_t$ only until
+    $\rho_t = 1+\varepsilon$, after which the minimum saturates at the constant
+    $(1+\varepsilon)\hat A_t$. Its derivative with respect to $\rho_t$ is therefore zero for $\rho_t >
+    1+\varepsilon$, removing the gradient signal that would otherwise keep increasing the action's
     probability without bound.
     \item $\hat A_t < 0$ (a worse-than-expected action): the same minimum instead saturates once
-    $\rho_t$ falls below $1-\epsilon$, removing the gradient signal that would keep decreasing the
+    $\rho_t$ falls below $1-\varepsilon$, removing the gradient signal that would keep decreasing the
     action's probability without bound.
 \end{itemize}
 In both cases $L^{\text{CLIP}}(\theta) \leq L^{\text{CPI}}(\theta)$ term by term, since the minimum of

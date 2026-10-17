@@ -189,7 +189,7 @@ Epochs                      & 10 \\
 Discount factor ($\gamma$)  & 0.99 \\
 GAE parameter ($\lambda$)   & 0.95 \\
 Learning rate                & $5 \times 10^{-5}$ \\
-Clip range ($\epsilon$)      & 0.13 \\
+Clip range ($\varepsilon$)      & 0.13 \\
 Entropy coefficient ($c_2$)  & 0.01 \\
 Value coefficient ($c_1$)    & 0.5 \\
 Network architecture         & $[256 \times 256]$ \\
@@ -210,7 +210,7 @@ noise is injected at the environment interface before command execution, both to
 to real actuator imprecision and to perturbations of the commanded joint velocities:
 \begin{equation}
 \mathbf{a}_t = \operatorname{clip}\left( \pi_\theta(\cdot \mid \mathbf{s}_t) + \mathbf{g},\, -1,\, 1 \right),
-\qquad \mathbf{g} \sim \mathcal{N}(0,\, 0.05^2 \mathbf{I}_6).
+\qquad \mathbf{g} \sim \mathcal{N}(0,\, 0.05^2 I_6).
 \label{eq:dikppo_actionnoise}
 \end{equation}
 This noise is not a substitute for full domain randomization: latency, backlash, payload variation,
@@ -227,7 +227,7 @@ L(\theta) = L^{\text{CLIP}}(\theta) - c_1 L^V(\theta) + c_2\, \mathbb{H}\!\left(
 \label{eq:dikppo_ppoloss}
 \end{equation}
 where $L^{\text{CLIP}}(\theta) = \mathbb{E}_t\!\left[ \min\!\left( \rho_t(\theta) \hat{A}_t,\,
-\operatorname{clip}(\rho_t(\theta), 1-\epsilon, 1+\epsilon)\, \hat{A}_t \right) \right]$ with policy
+\operatorname{clip}(\rho_t(\theta), 1-\varepsilon, 1+\varepsilon)\, \hat{A}_t \right) \right]$ with policy
 ratio $\rho_t(\theta) = \pi_\theta(\mathbf{a}_t \mid \mathbf{s}_t) /
 \pi_{\theta_{\text{old}}}(\mathbf{a}_t \mid \mathbf{s}_t)$, and $L^V(\theta)$ the mean-squared error
 between predicted and target value. Both networks update jointly over 10 epochs per rollout by
@@ -649,10 +649,10 @@ std).}
 \begin{table}[htbp]
 \centering
 \caption{Implementation of the classical baselines. DLS and Velocity QP share the pose error
-$\mathbf{e}=[\Delta\mathbf{p};\,\phi\hat{\mathbf{u}}]$ and a Jacobian $\mathbf{J}$ obtained by finite
-differencing of the forward kinematics ($\delta=10^{-4}$\,rad), recomputed at every step. All
+$\mathbf{e}=[\Delta\mathbf{p};\,\phi\hat{\mathbf{u}}]$ and a Jacobian $J$ obtained by finite
+differencing of the forward kinematics ($\varepsilon=10^{-4}$\,rad), recomputed at every step. All
 commands are multiplied by the frozen $a_\text{scale}$ of Table~\ref{tab:dikppo_simresults}. For
-TRAC-IK, $\boldsymbol{\theta}$ denotes the measured joint positions, used only to convert the
+TRAC-IK, $\mathbf{q}$ denotes the measured joint positions, used only to convert the
 solution into a velocity command.}
 \label{tab:dikppo_baselines}
 \footnotesize
@@ -661,15 +661,15 @@ solution into a velocity command.}
 \textbf{Method} & \textbf{Control law} & \textbf{Parameters} \\
 \midrule
 DLS~\citep{chiaverini1994review} &
-$\dot{\boldsymbol{\theta}}=\mathbf{J}^{\top}(\mathbf{J}\mathbf{J}^{\top}+\lambda^{2}\mathbf{I})^{-1}\mathbf{e}$ &
+$\dot{\mathbf{q}}=J^{\top}(JJ^{\top}+\lambda^{2}I)^{-1}\mathbf{e}$ &
 $\lambda=0.05$; unity gain \\
 Velocity QP~\citep{zhang2013variable} &
-$\min_{\dot{\boldsymbol{\theta}}}\ \tfrac{1}{2}\dot{\boldsymbol{\theta}}^{\top}(\mathbf{I}+\lambda\mathbf{J}^{\top}\mathbf{J})\dot{\boldsymbol{\theta}}-(\mathbf{J}^{\top}\mathbf{e})^{\top}\dot{\boldsymbol{\theta}}$ \newline
-s.t.\ $|\dot{\theta}_i|\le 1$\,rad/s &
+$\min_{\dot{\mathbf{q}}}\ \tfrac{1}{2}\dot{\mathbf{q}}^{\top}(I+\lambda J^{\top}J)\dot{\mathbf{q}}-(J^{\top}\mathbf{e})^{\top}\dot{\mathbf{q}}$ \newline
+s.t.\ $|\dot{q}_i|\le 1$\,rad/s &
 $\lambda=10^{-3}$; OSQP (tol.\ $10^{-4}$, $\le$1000 iter.); zero command if unsolved \\
 TRAC-IK~\citep{beeson2015trac} &
-Distance solve, then $\dot{\boldsymbol{\theta}}=(\boldsymbol{\theta}_\text{IK}-\boldsymbol{\theta})/\Delta t$, $\Delta t=0.034$\,s &
-$\epsilon=10^{-5}$; 5\,ms timeout; seeded with previous solution; held on failure \\
+Distance solve, then $\dot{\mathbf{q}}=(\mathbf{q}_\text{IK}-\mathbf{q})/\Delta t$, $\Delta t=0.034$\,s &
+$\varepsilon=10^{-5}$; 5\,ms timeout; seeded with previous solution; held on failure \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -1010,7 +1010,7 @@ alignment target provided to either agent.
 \includegraphics[width=\linewidth]{Images/alpha/Fig_1.jpg}
 % \caption{ALPHA architecture for cooperative dual-arm pre-assembly alignment: a frozen single-arm
 % DIK-PPO prior (lock symbol) and a MAPPO coordination policy (unlock symbol) are combined through the adaptive blending coefficient $\alpha_t^i$~\citep{sk2026priorguided}.}
-\caption{Prior guided policy architecture for cooperative dual-arm pre-assembly alignment under the CTDE paradigm. The frozen PPO base policy (top) independently outputs a per-arm reaching action $\mathbf{b}_t^i$ from local observations; the MAPPO actor-critic (bottom) outputs a coordination correction $\mathbf{m}_t^i$ and a blending increment from the 47-D local observation, with each agent's critic conditioned on the shared 92-D global state $S_t$. The two actions are combined per Eq.~(\ref{eq:alpha_combined}) into the joint velocity command executed by each arm.}
+\caption{Prior guided policy architecture for cooperative dual-arm pre-assembly alignment under the CTDE paradigm. The frozen PPO base policy (top) independently outputs a per-arm reaching action $\mathbf{b}_t^i$ from local observations; the MAPPO actor-critic (bottom) outputs a coordination correction $\mathbf{m}_t^i$ and a blending increment from the 47-D local observation, with each agent's critic conditioned on the shared 92-D global state $S_t$. The two actions are combined per Equation~\eqref{eq:alpha_combined} into the joint velocity command executed by each arm.}
 \label{fig:alpha_architecture}
 \end{figure}
 
@@ -1158,7 +1158,7 @@ GAE parameter ($\lambda$)    & 0.95 \\
 Learning rate                  & $5 \times 10^{-5}$ \\
 LR scheduler                     & KL-adaptive \\
 KL threshold                       & 0.008 \\
-Clip ratio ($\epsilon$)              & 0.13 \\
+Clip ratio ($\varepsilon$)              & 0.13 \\
 Value clip                            & 0.2 \\
 Value loss coefficient ($c_1$)          & 0.5 \\
 Entropy coefficient ($c_2$)              & 0.01 \\
@@ -1210,7 +1210,7 @@ Episode length              & 600 steps \\
 Discount factor ($\gamma$)  & 0.99 \\
 GAE parameter ($\lambda$)   & 0.95 \\
 Learning rate               & $5 \times 10^{-5}$ \\
-Clip ratio ($\epsilon$)     & 0.13 \\
+Clip ratio ($\varepsilon$)     & 0.13 \\
 Value loss coefficient ($c_1$) & 0.5 \\
 Entropy coefficient ($c_2$) & 0.01 \\
 Gradient norm clip          & 0.5 \\
@@ -1309,7 +1309,7 @@ The blended command decomposes as
 and the gating-induced term is bounded by 0.1 in $\ell_\infty$ norm, independent of the actor outputs.
 \end{proposition}
 \begin{proof}
-$\|\mathbf{b}_{t+1}^i - \mathbf{m}_{t+1}^i\|_\infty \le 2$ since both terms lie in $[-1,1]^6$, and by
+$\lVert \mathbf{b}_{t+1}^i - \mathbf{m}_{t+1}^i \rVert_\infty \le 2$ since both terms lie in $[-1,1]^6$, and by
 Proposition~\ref{prop:ratelimit} the gating factor is bounded by 0.05, giving $0.05 \times 2 = 0.1$.
 \end{proof}
 
@@ -1330,7 +1330,7 @@ bound does not measurably constrain how quickly the policy can shift its relianc
 \begin{proposition}[Bounded Deviation from the Prior]\label{prop:boundeddeviation}
 For fixed $\alpha_t^i$, the reachable command set is $\mathcal{U}(\alpha_t^i) = \alpha_t^i \mathbf{b}_t^i +
 (1-\alpha_t^i)[-1,1]^6$, a box of half-width $(1-\alpha_t^i)$ centered at $\alpha_t^i \mathbf{b}_t^i$;
-equivalently $\|\mathbf{u}_t^i - \alpha_t^i \mathbf{b}_t^i\|_\infty \le 1 - \alpha_t^i$. At the cap
+equivalently $\lVert \mathbf{u}_t^i - \alpha_t^i \mathbf{b}_t^i \rVert_\infty \le 1 - \alpha_t^i$. At the cap
 $\alpha_t^i=0.8$, the executed command is confined within 0.2 of the scaled prior.
 \end{proposition}
 
@@ -1369,7 +1369,7 @@ $\approx 5$ is awarded when both arms simultaneously satisfy tight position and 
 thresholds. During the alignment phase, both agents share a reward based on the distance and
 orientation error between their offset end-effectors,
 \begin{equation}
-r_{\text{align}}^i = r\!\left( \frac{d_{\text{EE}}}{2.8} \right) + r\!\left( \frac{\psi}{\pi} \right) + 10,
+r_{\text{align}}^i = r\!\left( \frac{d_{\text{ee}}}{2.8} \right) + r\!\left( \frac{\psi}{\pi} \right) + 10,
 \qquad \psi = \left\lVert \operatorname{axis\_angle}\!\left( R_{LR} R_{\text{des}}^{-1} \right) \right\rVert,
 \label{eq:alpha_align}
 \end{equation}
@@ -1379,7 +1379,7 @@ co-axial facing configuration.
 
 Pursuing a moving target directly, each arm's own offset end-effector, is unstable when both arms
 pursue each other simultaneously. To stabilize fine alignment in simulation, a snap mechanism
-activates once $d_{\text{EE}} < 0.08$\,m and $\psi < 0.2$\,rad: it computes a geometric midpoint
+activates once $d_{\text{ee}} < 0.08$\,m and $\psi < 0.2$\,rad: it computes a geometric midpoint
 between the two offset end-effectors and fixes it as a stable sub-goal for the remainder of the
 episode, replacing the shared alignment reward with a per-arm reward toward this fixed point,
 \begin{equation}

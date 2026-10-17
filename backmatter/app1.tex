@@ -45,7 +45,7 @@ Equation~\eqref{eq:sv_fwdkin} chains six such matrices, $T^{B}_{6}(\mathbf{q}) =
 T^{1}_{2}(q_2) \cdots T^{5}_{6}(q_6)$, one factor per joint. Because each factor is a rigid
 transform, the product is itself a rigid transform expressing the end-effector frame in the base
 frame for any joint configuration $\mathbf{q}$. The position of an intermediate joint $k$, rather
-than the end effector, is obtained by truncating the chain at $k$ and extracting its translation
+than the end-effector, is obtained by truncating the chain at $k$ and extracting its translation
 column: writing $T^{B}_{k}(\mathbf{q}) = \left[\begin{smallmatrix} R^{B}_{k} & \mathbf{p}^{B}_{k} \\
 \mathbf{0}^\top & 1\end{smallmatrix}\right]$, right-multiplying by the homogeneous origin
 $[0,0,0,1]^\top$ annihilates the rotation block and returns exactly the translation column,

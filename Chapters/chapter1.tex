@@ -9,7 +9,7 @@ This thesis is organized around a single progression. Automating industrial comp
 Each stage is a precondition for the next rather than an independent application: a component cannot be manipulated before it is localized; a second arm cannot be added safely before it is decided which arm acts; and concurrent motion cannot be trusted without a continuous distance signal. Furthermore, that safety signal is only useful once a planner consumes it. Only with a working classical planner in hand does it become possible to identify, precisely, the coordination problem that classical control cannot solve on its own. This thesis traces that progression from start to finish, from a single arm sorting bolts by classical computer vision to a pair of arms coordinating a pre-assembly alignment through reinforcement learning.
 
 
-This thesis begins at the exact point where conventional robotic deployments begin to strain. While industrial robots reduce human fatigue and are forecast to grow into a USD 55.4 billion industry by 2032~\citep{develop2024robotic}, conventional, hard-coded single-arm systems no longer satisfy the demands of unstructured, high-throughput manufacturing~\citep{abbas2023systematic}. A single arm's reach is strictly fixed; as work cells scale up, the spatial distribution of components and complexity of the task routinely exceeds what one manipulator can physically cover/handle. Modern manufacturing increasingly demands collaborative task execution such as cooperative assembly alignment, where an operation inherently requires the simultaneous coordination of two arms. The standard industrial response for deploying a second arm within the same workspace, transforms a baseline perception based pick and place problem into a coordination problem, coordination into a safety problem, and safety into a motion planning problem. Each of these challenges is addressed sequentially by the studies comprising this thesis~\citep{surya2025iapf,sk2025competitive}. Finally, only when classical perception, coordination, safety, and planning frameworks are established does the fundamental limitation emerge: a fixed, hand-designed control law cannot inherently generalize across continuous trajectories or co-evolve a coordination strategy with a control prior. Learned control directly resolves this limitation~\citep{sk2025diktracking,sk2026priorguided}.
+This thesis begins at the exact point where conventional robotic deployments begin to strain. While industrial robots reduce human fatigue and are forecast to grow into a USD 55.4 billion industry by 2032~\citep{develop2024robotic}, conventional, hard-coded single-arm systems no longer satisfy the demands of unstructured, high-throughput manufacturing~\citep{abbas2023systematic}. A single arm's reach is strictly fixed; as work cells scale up, the spatial distribution of components and complexity of the task routinely exceeds what one manipulator can physically cover/handle. Modern manufacturing increasingly demands collaborative task execution such as cooperative assembly alignment, where an operation inherently requires the simultaneous coordination of two arms. The standard industrial response for deploying a second arm within the same workspace, transforms a baseline perception based pick-and-place problem into a coordination problem, coordination into a safety problem, and safety into a motion planning problem. Each of these challenges is addressed sequentially by the studies comprising this thesis~\citep{surya2025iapf,sk2025competitive}. Finally, only when classical perception, coordination, safety, and planning frameworks are established does the fundamental limitation emerge: a fixed, hand-designed control law cannot inherently generalize across continuous trajectories or co-evolve a coordination strategy with a control prior. Learned control directly resolves this limitation~\citep{sk2025diktracking,sk2026priorguided}.
 
 This thesis develops that progression across four connected themes. It begins with
 \emph{perception} for small, low-textured industrial components such as fasteners, moves from a single arm to a \emph{dual-arm} system and the coordination question this raises, establishes the \emph{safety and motion-planning} paradigm that shared-workspace operation demands, and finally replaces the classical control layer with \emph{learned} controllers for both single-arm trajectory tracking and cooperative dual-arm alignment. Figure~\ref{fig:intro_roadmap} shows how the eight constituent studies map onto this progression, and Table~\ref{tab:intro_studies} summarizes each of them.
@@ -82,7 +82,7 @@ CNN to address this challenge, demonstrating potential for recovering pose infor
 computational complexity and a strong reliance on the dataset. The method's robustness was further
 compromised by lighting variation, occlusions, and background clutter, all of which affect
 descriptor accuracy. \citet{back2020segmenting} proposed a synthetic data generation pipeline and
-an RGB-D Fusion Mask R-CNN to address the segmentation of texture-less industrial components. By
+an RGB-D Fusion Mask R-CNN to address the segmentation of low-textured industrial components. By
 randomizing textures in synthetic data the focus shifted to shape-based features, and a confidence
 map estimator enhanced the model's ability to exploit depth information for improved segmentation.
 While promising, the reliance on synthetic data for training raises concerns about domain adaptation
@@ -107,7 +107,7 @@ being handled~\citep{yan2020fastobjectpose}.
 
 The first study of this thesis takes that route. It presents a novel approach for automated bolt
 handling using 3D point-cloud data acquired from an RGB-D camera, employing $k$-means clustering
-for segmentation and Oriented Chamfer matching for precise pose estimation, enabling a 6-DOF Kinova Gen3 Lite arm to accurately pick and place bolts, with color-based segmentation and contour analysis facilitating size estimation for subsequent sorting. The method leverages the rich information provided by RGB-D cameras to improve object segmentation accuracy and reduce reliance on multiple sensors. Experiments conducted in a simulated shop-floor table top environment using Gazebo (ROS1) with a Kinova Gen3 Lite arm demonstrated the system's ability to handle overlapping bolts and achieved bolt sorting without any misclassifications~\citep{sk2024bolthandling}.
+for segmentation and Oriented Chamfer matching for precise pose estimation, enabling a 6-DOF Kinova Gen3 Lite arm to accurately pick-and-place bolts, with color-based segmentation and contour analysis facilitating size estimation for subsequent sorting. The method leverages the rich information provided by RGB-D cameras to improve object segmentation accuracy and reduce reliance on multiple sensors. Experiments conducted in a simulated shop-floor table top environment using Gazebo (ROS~1) with a Kinova Gen3 Lite arm demonstrated the system's ability to handle overlapping bolts and achieved bolt sorting without any misclassifications~\citep{sk2024bolthandling}.
 
 %% ------------------------------------------------------------
 \subsection{Learned Segmentation Fused with Classical Vision}\label{subsec:intro_learned_vision}
@@ -268,10 +268,10 @@ linear velocity control with a Proportional-Derivative (PD) controller for angul
 create a hybrid twist command for precise manipulation, validated experimentally across repeated
 dual-arm trials rather than through a closed-form stability proof. Its contributions are, first, a
 case-specific analytical inter-arm distance algorithm employing closed-form vector solutions for
-parallel, intersecting, and skew link configurations with $\epsilon$-based numerical stability
+parallel, intersecting, and skew link configurations with $\varepsilon$-based numerical stability
 handling. Second, the hybrid linear-angular control framework, integrating exponential
 $\mathcal{O}(e^{d})$ attractive and inverse power-law $\mathcal{O}(d^{-2.3})$ repulsive forces,
-validated empirically for smooth, stable trajectories. Third, a 4-DoF vision-based pose
+validated empirically for smooth, stable trajectories. Third, a 4-DOF vision-based pose
 estimation module performing real-time component detection at 20 frames per second with oriented
 bounding box analysis providing position and yaw for precise grasp planning. Fourth, state-conditional
 kinodynamic control, in which velocity damping coefficients and task-specific $z$-axis constraints
@@ -398,7 +398,7 @@ constraints.
 
 Velocity-level controllers address this by operating directly in the differential domain.
 Resolved-rate motion control~\citep{whitney1969resolved} computes joint velocities using the
-Jacobian pseudo-inverse, damped least squares~\citep{wampler1986manipulator,chiaverini1994review}
+Jacobian pseudo-inverse, damped least-squares~\citep{wampler1986manipulator,chiaverini1994review}
 introduces a damping factor to prevent velocity singularities, and quadratic velocity-level
 programming formulations~\citep{zhang2013variable} further impose joint limit constraints explicitly,
 offering safer hardware deployment. All of these methods, however, require an explicit, accurate
@@ -523,7 +523,7 @@ a global depth camera in simulation~\citep{sk2024bolthandling}, an Intel RealSen
 the segmentation mask for size estimation~\citep{sk2024boltsorting}, wrist-mounted eye-in-hand
 cameras for independent per-arm perception~\citep{sk2025sharedvision}, and YOLOv8 oriented bounding
 box detection at 20--30 FPS for the planning and allocation
-studies~\citep{surya2025iapf,sk2025competitive}. Integration spans Gazebo with ROS1 and ROS2 and the
+studies~\citep{surya2025iapf,sk2025competitive}. Integration spans Gazebo with ROS~1 and ROS~2 and the
 ROS Kortex API for hardware communication, with control loops at 10--20\,Hz and a 200\,Hz policy
 inference rate on a CPU-only platform~\citep{sk2025competitive,sk2026priorguided}. Validation progresses
 from simulation only, to simulation and hardware, to direct sim-to-real transfer.
@@ -542,7 +542,7 @@ Table~\ref{tab:intro_results} collects the headline results.
 1 & Bolt sorting in simulation                & No misclassifications on overlapping bolts \\
 2 & Segmentation quality (DeepLabV3+)         & mIoU 0.95, best of PPLiteSeg~\citep{peng2022pp} / OCRNet~\citep{yuan2020object} / DeepLabV3+~\citep{chen2018encoder} \\
 2 & Bolt sorting on real hardware             & No misclassifications and accurate size estimation \\ 
-3 & Run-time role assignment                       & End-to-end in Gazebo/ROS2 and on physical hardware \\
+3 & Run-time role assignment                       & End-to-end in Gazebo/ROS~2 and on physical hardware \\
 4 & Inter-arm distance monitoring             & 16 link pairs tracked against a 0.1\,m safety threshold \\
 5 & Vision detection accuracy (YOLOv8 OBB~\citep{yolov8})    & 0.99 bolts / 0.97 nuts at 20 FPS \\
 6 & Velocity improvement over fixed allocation & $\approx$47\% (homogeneous), zero collisions \\
@@ -613,9 +613,9 @@ studies in this thesis.
 \toprule
 \textbf{\#} & \textbf{Theme} & \textbf{Core method} & \textbf{Platform / validation} & \textbf{Gap} \\
 \midrule
-1 & Perception        & $k$-means + Oriented Chamfer matching on RGB-D & Gazebo (ROS1), Kinova Gen3 Lite & G1 \\
+1 & Perception        & $k$-means + Oriented Chamfer matching on RGB-D & Gazebo (ROS~1), Kinova Gen3 Lite & G1 \\
 2 & Perception        & DeepLabV3+~\citep{chen2018encoder} segmentation + classical vision, depth fusion & Hardware, RealSense D415 & G1 \\
-3 & Dual-arm coordination & Eye-in-hand ArUco~\citep{garrido2014automatic} search, reachability role assignment & Gazebo/ROS2 + dual-arm hardware & G2 \\
+3 & Dual-arm coordination & Eye-in-hand ArUco~\citep{garrido2014automatic} search, reachability role assignment & Gazebo/ROS~2 + dual-arm hardware & G2 \\
 4 & Safety            & Line-segment kinematic inter-arm distance matrix & Dual Kinova Gen3 Lite hardware & G3 \\
 5 & Motion planning   & iAPF with PD angular control, empirical validation & Hardware, YOLOv8 OBB~\citep{yolov8} at 20 FPS & G4 \\
 6 & Task allocation   & Competitive allocation, temporal proposal windows & Dual-arm hardware & G5 \\
@@ -645,7 +645,7 @@ The contributions of this thesis, in the order the studies are developed, are as
     \item[C3. Runtime reachability-based role assignment.] A per-detection rule selecting the
     acting arm by minimum base-to-target distance, and a cross-frame pose relay expressing a target
     seen by one arm's eye-in-hand camera in the other arm's base frame, so reachability is evaluated
-    for both arms without a shared external sensor. Validated end-to-end in Gazebo/ROS2 and on
+    for both arms without a shared external sensor. Validated end-to-end in Gazebo/ROS~2 and on
     hardware~\citep{sk2025sharedvision}.
 
     \item[C4. Kinematics-based inter-arm distance monitoring.] A geometric framework classifying

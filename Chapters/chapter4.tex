@@ -23,7 +23,7 @@ trajectory and visual target localization. Section~\ref{sec:sv_relay} presents t
 relay, and Section~\ref{sec:sv_reachability} the reachability-based role-assignment rule built on
 top of it. Section~\ref{sec:sv_control} covers the manipulation sequence and the resolved-rate
 control law that executes it, and Section~\ref{sec:sv_results} presents end-to-end validation in
-Gazebo/ROS2 simulation and on physical dual-arm hardware.
+Gazebo/ROS~2 simulation and on physical dual-arm hardware.
 
 %% ============================================================
 \section{System Architecture and Kinematic Model}\label{sec:sv_architecture}
@@ -80,9 +80,9 @@ numerical differentiation of $T^{B}_{G}$:
 \begin{equation}
 J_{:,i} =
 \begin{bmatrix}
-\dfrac{\mathbf{p}(\mathbf{q}+\epsilon\mathbf{e}_i) - \mathbf{p}(\mathbf{q}-\epsilon\mathbf{e}_i)}{2\epsilon} \\[1.2ex]
-\dfrac{\log\!\left( R(\mathbf{q}+\epsilon\mathbf{e}_i)\, R(\mathbf{q}-\epsilon\mathbf{e}_i)^\top \right)}{2\epsilon}
-\end{bmatrix}, \qquad \epsilon = 10^{-6},
+\dfrac{\mathbf{p}(\mathbf{q}+\varepsilon\mathbf{e}_i) - \mathbf{p}(\mathbf{q}-\varepsilon\mathbf{e}_i)}{2\varepsilon} \\[1.2ex]
+\dfrac{\log\!\left( R(\mathbf{q}+\varepsilon\mathbf{e}_i)\, R(\mathbf{q}-\varepsilon\mathbf{e}_i)^\top \right)}{2\varepsilon}
+\end{bmatrix}, \qquad \varepsilon = 10^{-6},
 \label{eq:sv_jacobian}
 \end{equation}
 where $\mathbf{p}(\cdot)$ and $R(\cdot)$ are the translational and rotational parts of $T^{B}_{G}$
@@ -90,10 +90,10 @@ and $\mathbf{e}_i$ is the $i^{\text{th}}$ standard basis vector. The rotation te
 place of $R^{-1}$, valid since $R^{-1} = R^\top$ for all $R \in SO(3)$. Unlike position, which lies
 in a vector space and admits a direct central difference, rotations do not subtract meaningfully;
 $\log(\cdot)$ denotes the matrix logarithm mapping a relative rotation
-$R(\mathbf{q}+\epsilon\mathbf{e}_i)R(\mathbf{q}-\epsilon\mathbf{e}_i)^\top \in SO(3)$ to its
+$R(\mathbf{q}+\varepsilon\mathbf{e}_i)R(\mathbf{q}-\varepsilon\mathbf{e}_i)^\top \in SO(3)$ to its
 axis-angle vector in $\mathbb{R}^3$. Since this relative rotation accumulates over the interval
-$[-\epsilon, \epsilon]$, its rotation vector is approximately $2\epsilon$ times the instantaneous
-angular-velocity direction, so dividing by $2\epsilon$ recovers the angular-velocity Jacobian column
+$[-\varepsilon, \varepsilon]$, its rotation vector is approximately $2\varepsilon$ times the instantaneous
+angular-velocity direction, so dividing by $2\varepsilon$ recovers the angular-velocity Jacobian column
 exactly as the position rows recover the linear one.
 
 %% ============================================================
@@ -197,7 +197,7 @@ each arm already has once Equation~\eqref{eq:sv_relay} has run.
 \textbf{Symbol} & \textbf{Description} & \textbf{Value} \\
 \midrule
 \multicolumn{3}{l}{\textit{Kinematics and rig geometry}} \\
-$\epsilon$              & Central-difference step (Equation~\eqref{eq:sv_jacobian})       & $10^{-6}$ \\
+$\varepsilon$              & Central-difference step (Equation~\eqref{eq:sv_jacobian})       & $10^{-6}$ \\
 $T^{B_L}_{B_R}$          & Inter-arm transform (translation; rotation)                      & $[1.08, 0, 0]$~m; $R_z(180^\circ)$ \\
 $L_w$                   & Workspace half-extent (Equation~\eqref{eq:sv_reach})             & $0.5$~m \\
 \midrule
@@ -277,7 +277,7 @@ K_p^{\text{ori}}\,\mathbf{e}_o + K_d^{\text{ori}}\,\dot{\mathbf{e}}_{o,\text{fil
 \label{eq:sv_twist}
 \end{equation}
 
-The filtered derivative in Eq.~\ref{eq:sv_twist} is a discrete first-order low-pass of the raw error difference, with time constant $\tau$ and control period $\Delta t$, as in Eq.~\ref{deriv_filter}:
+The filtered derivative in Equation~\eqref{eq:sv_twist} is a discrete first-order low-pass of the raw error difference, with time constant $\tau$ and control period $\Delta t$, as in Equation~\eqref{deriv_filter}:
 \begin{equation}
 \dot{\mathbf{e}}_{\mathrm{filt}}
 \leftarrow
@@ -357,14 +357,14 @@ waypoint's target is computed and the loop repeats.
 %% ============================================================
 
 The complete pipeline, homing, concurrent search, cross-frame pose relay, reachability-based role
-assignment, and the full manipulation sequence, was validated end-to-end in Gazebo/ROS2 simulation
+assignment, and the full manipulation sequence, was validated end-to-end in Gazebo/ROS~2 simulation
 (Figure~\ref{fig:sv_simsetup}) and on physical dual-arm Kinova Gen3 Lite hardware
 (Figure~\ref{fig:sv_hwexp1}).
 
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=0.7\linewidth]{Images/sharedVision/sim_setup.png}
-\caption{Gazebo/ROS2 simulation setup: two Kinova Gen3 Lite arms sharing a tabletop workspace with a
+\caption{Gazebo/ROS~2 simulation setup: two Kinova Gen3 Lite arms sharing a tabletop workspace with a
 fiducial target~\citep{sk2025sharedvision}.}
 \label{fig:sv_simsetup}
 \end{figure}
@@ -415,7 +415,7 @@ and LEFT idle, the mirrored case of Figure~\ref{fig:sv_lefttraj}~\citep{sk2025sh
 \label{fig:sv_righterror}
 \end{figure}
 
-Figure~\ref{fig:sv_lefttraj} shows the LEFT arm's end effector tracing the full waypoint sequence,
+Figure~\ref{fig:sv_lefttraj} shows the LEFT arm's end-effector tracing the full waypoint sequence,
 approach, descend, lift, and place, while the RIGHT arm's position remains essentially flat across
 the same sample range, consistent with it never receiving a motion command once the
 reachability-based rule assigned the task to LEFT. The corresponding error convergence in
