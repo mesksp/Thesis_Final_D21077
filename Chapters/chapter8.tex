@@ -221,7 +221,7 @@ Estimation with the critic value $V_\theta(\mathbf{s}_t)$:
 \delta_t = r_{t+1} + \gamma V_\theta(\mathbf{s}_{t+1}) - V_\theta(\mathbf{s}_t),
 \label{eq:dikppo_gae}
 \end{equation}
-and the actor is updated by maximizing the standard clipped PPO objective,
+and the actor is updated by maximizing the standard clipped PPO objective (Appendix~\ref{app:rl} reviews both),
 \begin{equation}
 L(\theta) = L^{\text{CLIP}}(\theta) - c_1 L^V(\theta) + c_2\, \mathbb{H}\!\left( \pi_\theta(\cdot \mid \mathbf{s}_t) \right),
 \label{eq:dikppo_ppoloss}
@@ -1107,7 +1107,7 @@ local experience tuple,
 \end{equation}
 where $\mathbf{s}_t^i \in \mathbb{R}^{47}$ is the actor's local observation, $\mathbf{a}_t^i \in
 \mathbb{R}^7$ the noisy executed action, and $S_t \in \mathbb{R}^{92}$ the global state available
-only to the centralized critic during training. Generalized Advantage Estimation is computed using
+only to the centralized critic during training (see Appendix~\ref{app:rl}). Generalized Advantage Estimation is computed using
 the centralized value function,
 \begin{equation}
 \hat{A}_t^i = \sum_{l=0}^{N_{\text{steps}}} (\gamma\lambda)^l\, \delta_{t+l}^i, \qquad

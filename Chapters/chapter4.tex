@@ -54,7 +54,7 @@ kinematically identical, the equations of this section apply to either arm and t
 omitted; it is reintroduced in Section~\ref{sec:sv_relay}, where quantities from both arms must be
 related to one another.
 
-Each arm's forward kinematics is a chain of fixed-geometry, single-DOF homogeneous transforms
+Each arm's forward kinematics (reviewed in Appendix~\ref{app:kinematics}) is a chain of fixed-geometry, single-DOF homogeneous transforms
 $T^{k-1}_{k}(q_k)$, where $T^{j}_{i}$ denotes, as in Equation~\eqref{eq:vp_transform}, the transform
 that expresses frame $i$'s coordinates in frame $j$:
 \begin{equation}
@@ -292,7 +292,7 @@ applied independently to $\mathbf e_p$ and $\mathbf e_o$; without it, the $K_d$ 
 
 
 This twist is mapped to the joint speeds actually sent to the arm by damped least-squares inverse
-differential kinematics:
+differential kinematics (derived as a regularized optimization in Appendix~\ref{app:dls}):
 \begin{equation}
 \dot{\mathbf{q}} = J^\top \left( J J^\top + \lambda^2 I \right)^{-1} \mathbf{v},
 \label{eq:sv_dls}
