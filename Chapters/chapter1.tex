@@ -34,7 +34,7 @@ This thesis develops that progression across four connected themes. It begins wi
 \node[studybox, fill=blue!6]   (s1) at (0,-1.35)               {\textbf{[P1]} RGB-D\\ {+} Template Matching\\ {+} Chamfer Distance\\\textbf{[P2]} DeepLabV3{+}\\{+} Depth Fusion};
 \node[studybox, fill=green!6]  (s2) at (0.235\textwidth,-1.35) {\textbf{[P3]} Eye-in-hand\\search\\ {+} run-time reachability\\{+}role assignment \\{+}RRMC};
 \node[studybox, fill=orange!6] (s3) at (0.470\textwidth,-1.35) {\textbf{[P4]} Inter-Arm Link Distance\\\textbf{[P5]} iAPF Motion Planning\\\textbf{[P6]} Competitive\\ Task Allocation};
-\node[studybox, fill=red!6]    (s4) at (0.705\textwidth,-1.35) {\textbf{[P7]} PPO Differential IK\\ for Trajecory Tracking \\\textbf{[P8]} Prior Guided\\ Policy Training};
+\node[studybox, fill=red!6]    (s4) at (0.705\textwidth,-1.35) {\textbf{[P7]} PPO Differential IK\\ for Trajectory Tracking \\\textbf{[P8]} Prior Guided\\ Policy Training};
 
 \draw[flow] (t1.east) -- (t2.west);
 \draw[flow] (t2.east) -- (t3.west);
@@ -687,7 +687,7 @@ The remainder of this thesis is structured as follows.
     matching and segmentation for low-textured objects, size estimation from RGB-D information,
     dual-arm coordination, motion planning and task allocation, collision detection and artificial potential field methods, and learning-based approaches to inverse kinematics and multi-agent manipulation.
 
-    \item[Chapter 3] presents the vision pipelines for automated bolt handling and sorting, covering
+    \item[Chapter 3] presents vision-guided perception for robotic handling and sorting of industrial components, covering
     RGB-D point-cloud segmentation with Oriented Chamfer matching, deep-learning-based semantic
     segmentation, depth-based size estimation, and localization in the robot's configuration.
 
@@ -713,9 +713,15 @@ The remainder of this thesis is structured as follows.
 
     \item[Chapter 8] presents the learning-based controllers, covering the coupled-reward
     differential inverse kinematics formulation for non-spherical wrist trajectory tracking and the
-    prior guded policy learning architecture for cooperative dual-arm pre-assembly alignment,
+    prior guided policy learning architecture for cooperative dual-arm pre-assembly alignment,
     together with their sim-to-real validation.
 
     \item[Chapter 9] concludes with a summary of contributions, a discussion of limitations, and
     directions for future work.
 \end{description}
+
+The appendices collect supporting material: Appendix~\ref{app:kinematics} covers forward
+kinematics and rotation representations, Appendix~\ref{app:distance} the closed-form minimum
+distance between line segments, Appendix~\ref{app:dls} damped least-squares inverse kinematics as
+regularized optimization, and Appendix~\ref{app:rl} the reinforcement learning preliminaries
+(GAE, the PPO clipped objective, and CTDE).
