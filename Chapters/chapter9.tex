@@ -31,7 +31,7 @@ rather than from any assessment introduced in this chapter.
 \begin{description}
     \item[Contribution.] The first study localizes overlapping bolts from RGB-D point clouds using
     $k$-means segmentation to restrict the search volume and Oriented Chamfer matching for pose
-    estimation, with colour-based segmentation and contour analysis for size estimation, achieving
+    estimation, with color-based segmentation and contour analysis for size estimation, achieving
     bolt sorting from a cluttered bin without misclassification in Gazebo
     simulation~\citep{sk2024bolthandling}. The second study replaces classical segmentation with a
     custom-trained DeepLabV3+ model, reaching a mean Intersection over Union of 0.95 against
@@ -200,14 +200,14 @@ rather than from any assessment introduced in this chapter.
     geometries at a single spatial scale; that hardware baseline comparison against TRAC-IK, DLS, and SAC-S was restricted to
     the circular trajectory, while the proposed method was further validated on the lemniscate,
     3-D Lissajous, and square trajectories without retraining, leaving a head-to-head hardware
-    comparison on the more complex trajectories open; that controller behaviour near kinematic
+    comparison on the more complex trajectories open; that controller behavior near kinematic
     singularities remains uncharacterized, since the policy was not explicitly trained on
     singularity-proximal configurations; and that, because the policy has no explicit dynamic model
     or closed-form stability guarantee, it does not offer the formal safety guarantees available to
     model-based controllers~\citep{sk2025diktracking}.
 
     \item[Future directions.] The study identifies incorporating singularity-proximal configurations
-    during rollout collection to enable verified recovery behaviour at kinematic boundaries;
+    during rollout collection to enable verified recovery behavior at kinematic boundaries;
     multi-seed training of the TRPO-D and SAC-S baselines and the ablation variants; adding a reference
     velocity or waypoint preview to the observation; domain randomization and an external safety
     layer; extending the hardware baseline comparison to the non-circular
@@ -218,7 +218,7 @@ rather than from any assessment introduced in this chapter.
     coordinated bi-manual control, as a natural extension toward collaborative assembly operations
     requiring simultaneous precise trajectory tracking under contact
     constraints~\citep{sk2025diktracking}. The eighth study of this thesis takes up exactly this
-    direction, reusing the trained policy, frozen, as the single-arm prior inside GPC.
+    direction, reusing the trained policy, frozen, as the single-arm prior inside the prior guided policy.
 \end{description}
 
 %% ------------------------------------------------------------
@@ -227,7 +227,7 @@ rather than from any assessment introduced in this chapter.
 
 \begin{description}
     \item[Contribution.] The eighth study reuses the seventh study's trained policy, frozen, as the
-    single-arm prior inside GPC (Gated Prior Composition), a hierarchical architecture in which a
+    single-arm prior inside the prior guided policy, a hierarchical architecture in which a
     Multi-Agent PPO coordination policy, trained under Centralized Training with Decentralized
     Execution, is combined with the frozen prior through a learned, incrementally updated gating
     scalar co-trained with it from timestep zero, achieving 95.9\% reach and 93.9\% alignment success
@@ -266,7 +266,7 @@ rather than from any assessment introduced in this chapter.
 Read together, the future directions identified independently across these eight studies converge
 on a small number of recurring themes rather than eight unrelated wish-lists. Perception
 completeness recurs three times: the first study's own call to integrate with a dual-arm system, the
-second study's call to handle occluded and moving objects, and the eighth study's call to give GPC
+second study's call to handle occluded and moving objects, and the eighth study's call to give the prior guided policy
 a vision front-end so that object pose is sensed rather than assumed, are each, in the terms their
 own authors used, instances of the same unfinished step. External-obstacle awareness recurs twice,
 in the fourth study's assumption of an obstacle-free shared workspace and the fifth study's identical

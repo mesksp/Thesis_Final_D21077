@@ -12,7 +12,7 @@ planners require, while learned detectors are black boxes needing large training
 datasets~\citep{sk2025distance,surya2025iapf}.
 
 This chapter presents a kinematics-based framework that closes gap G3. Each manipulator link is
-modelled as a line segment in 3D space, positioned directly from forward kinematics and live joint
+modeled as a line segment in 3D space, positioned directly from forward kinematics and live joint
 feedback, so that inter-arm distance is available continuously with no external sensor and no
 sensor-to-robot calibration beyond the arms' own kinematic models. Section~\ref{sec:dm_model}
 develops the line-segment kinematic model for $N$ arms sharing a workspace.
@@ -62,7 +62,7 @@ $k=0$ instance of Equation~\eqref{eq:dm_jointpos} with $T^{B_i}_{0} = I_4$:
 \end{equation}
 the translation block of $T^{B_1}_{B_i}$ (so $\mathbf{p}_1^0 = \mathbf{0}$). Consequently arm $i$
 contributes exactly $m_i$ segments, from the base to $J_1$, $J_1$ to $J_2$, and so on up to
-$J_{m_i}$. Each physical link of arm $i$, between consecutive joints $k-1$ and $k$, is modelled as
+$J_{m_i}$. Each physical link of arm $i$, between consecutive joints $k-1$ and $k$, is modeled as
 the line segment
 \begin{equation}
 L_i^k = \left\{ \mathbf{p}_i^{k-1} + t\left( \mathbf{p}_i^k - \mathbf{p}_i^{k-1} \right) \;\middle|\; t \in [0,1] \right\},
@@ -70,8 +70,8 @@ L_i^k = \left\{ \mathbf{p}_i^{k-1} + t\left( \mathbf{p}_i^k - \mathbf{p}_i^{k-1}
 \end{equation}
 and the complete set of link segments across all $N$ arms is
 $\mathcal{S} = \{ L_i^k \mid i \in [1,N],\, k \in [1,m_i] \}$, where $L_i^k$ is segment $k$ of arm $i$
-and $m_i$ is the total number of joints (hence segments) of arm $i$. A segment is the centreline of
-its link, so every distance computed in this chapter is a centreline distance; the physical clearance
+and $m_i$ is the total number of joints (hence segments) of arm $i$. A segment is the centerline of
+its link, so every distance computed in this chapter is a centerline distance; the physical clearance
 between links of radii $r_i$ and $r_l$ is $d - r_i - r_l$, and any safety threshold applied to $d$
 must include this margin.
 
@@ -113,7 +113,7 @@ vanishes exactly when the offset $\mathbf{w}$ lies in the plane spanned by the t
 the coplanarity condition for the two supporting lines; for non-parallel lines, coplanarity is
 equivalent to intersection. Dividing by $\lVert \mathbf{c} \rVert$ gives
 $\lvert \mathbf{c} \cdot \mathbf{w} \rvert / \lVert \mathbf{c} \rVert$, which is the distance between the two
-supporting lines, so both tolerances are scale-invariant (dimensionless and in metres respectively)
+supporting lines, so both tolerances are scale-invariant (dimensionless and in meters respectively)
 rather than depending on the link lengths. The parallel test is not an independent heuristic: the
 determinant of the linear system in Equation~\eqref{eq:dm_skew} equals
 $\lVert \mathbf{u} \rVert^2 \lVert \mathbf{v} \rVert^2 - (\mathbf{u} \cdot \mathbf{v})^2 = \lVert \mathbf{c} \rVert^2$,
@@ -257,7 +257,7 @@ Equation~\eqref{eq:dm_jointpos}.
 \begin{table}[htbp]
 \centering
 \caption{Denavit--Hartenberg parameters for the Kinova Gen3 Lite manipulator, used for line-segment
-modelling.}
+modeling.}
 \label{tab:dm_dh}
 \begin{tabular}{ccccc}
 \toprule
@@ -356,7 +356,7 @@ arms connected via Ethernet to a single control PC and accessed through the Kino
 Twist (end-effector velocity) control drove the two arms toward pick targets of
 $[0.385, 0.045, -0.01]$\,m (LEFT) and $[0.327, 0.050, -0.01]$\,m (RIGHT), while
 Algorithm~\ref{alg:dm_collision} computed the inter-arm distance matrix continuously for all sixteen
-monitored link pairs, against an arbitrary safety threshold of $0.1$\,m on the centreline distance.
+monitored link pairs, against an arbitrary safety threshold of $0.1$\,m on the centerline distance.
 
 \begin{figure}[htbp]
 \centering

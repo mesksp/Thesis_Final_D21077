@@ -55,7 +55,7 @@ Efficient object manipulation is a crucial component of modern industrial automa
 object detection, size estimation, and sorting are essential for a range of processes including
 component assembly, packaging, and quality control. In particular, sorting small, low-textured
 objects in densely packed environments, common in warehouses, assembly lines, and logistics
-operations, remains a significant challenge. Manual sorting is labour-intensive, error-prone,
+operations, remains a significant challenge. Manual sorting is labor-intensive, error-prone,
 and can lead to production bottlenecks, while inaccurate sorting results in delayed production,
 increased costs, and reduced overall efficiency.
 
@@ -71,7 +71,7 @@ complexity and cost.
 %% ------------------------------------------------------------
 
 Classical vision techniques, markers, edge detection, corner detection, and contour detection,
-may not be reliable in all situations. Under varying light conditions, shapes, and colours
+may not be reliable in all situations. Under varying light conditions, shapes, and colors
 these methods can underperform at localization, producing faulty localization and size
 estimation~\citep{omahony2020deep}. The difficulty is well documented across the object detection and pose estimation literature. \citet{sumi2002object} used stereo vision to determine the 6-DOF pose of an object placed in a cluttered scene even under occlusion, demonstrating good accuracy in pose estimation and improved recognition rates, but the work faces challenges related to computational complexity and is limited to certain lighting conditions. \citet{hu2018segmentation} introduced a segmentation-driven approach to 6D pose estimation which, by predicting 2D keypoint locations for visible object parts and combining them using confidence scores, achieved robust pose estimation and state-of-the-art performance on challenging datasets, although its reliance on accurate segmentation and its potential sensitivity to occlusions and initial conditions remain
 limitations.
@@ -92,7 +92,7 @@ Shape-based object segmentation can be advantageous in scenarios with poor figur
 or illumination~\citep{borenstein2006shape}, although while such a framework performs well on the
 shapes it has been trained on, its ability to generalize to completely unseen shapes may be limited.
 \citet{wohlkinger2011shape} instead viewed the classification task as a matching problem,
-introducing a method that identifies similar 3D models from comparable viewpoints by analysing
+introducing a method that identifies similar 3D models from comparable viewpoints by analyzing
 specific surface features. Although the method incorporates inter-view similarity, it may still
 struggle with extreme variations in viewpoint, and objects viewed from angles significantly
 different from those in the training set may not be matched accurately. The approach may also have
@@ -107,7 +107,7 @@ being handled~\citep{yan2020fastobjectpose}.
 
 The first study of this thesis takes that route. It presents a novel approach for automated bolt
 handling using 3D point-cloud data acquired from an RGB-D camera, employing $k$-means clustering
-for segmentation and Oriented Chamfer matching for precise pose estimation, enabling a 6-DOF Kinova Gen3 Lite arm to accurately pick and place bolts, with colour-based segmentation and contour analysis facilitating size estimation for subsequent sorting. The method leverages the rich information provided by RGB-D cameras to improve object segmentation accuracy and reduce reliance on multiple sensors. Experiments conducted in a simulated shop-floor table top environment using Gazebo (ROS1) with a Kinova Gen3 Lite arm demonstrated the system's ability to handle overlapping bolts and achieved bolt sorting without any misclassifications~\citep{sk2024bolthandling}.
+for segmentation and Oriented Chamfer matching for precise pose estimation, enabling a 6-DOF Kinova Gen3 Lite arm to accurately pick and place bolts, with color-based segmentation and contour analysis facilitating size estimation for subsequent sorting. The method leverages the rich information provided by RGB-D cameras to improve object segmentation accuracy and reduce reliance on multiple sensors. Experiments conducted in a simulated shop-floor table top environment using Gazebo (ROS1) with a Kinova Gen3 Lite arm demonstrated the system's ability to handle overlapping bolts and achieved bolt sorting without any misclassifications~\citep{sk2024bolthandling}.
 
 %% ------------------------------------------------------------
 \subsection{Learned Segmentation Fused with Classical Vision}\label{subsec:intro_learned_vision}
@@ -131,8 +131,8 @@ size.
 
 Image segmentation is the fundamental technique here, partitioning an image into distinct regions
 based on the class to which each pixel belongs. Segmentation can be achieved in two ways, instance
-segmentation, which would classify all bolts within a cluttered image and assign a unique colour and
-label to each individual bolt, and semantic segmentation, which assigns a single label and colour to
+segmentation, which would classify all bolts within a cluttered image and assign a unique color and
+label to each individual bolt, and semantic segmentation, which assigns a single label and color to
 all bolts in the image~\citep{yin2022bridging}. Because the objective is to sort bolts according to
 their size rather than to distinguish individual instances, a unique label per bolt is not required,
 and using semantic segmentation simplifies the segmentation process and reduces computational
@@ -158,7 +158,7 @@ measurements.
 
 The concrete challenges in this task are therefore fivefold, overcoming lighting conditions and
 cluttered environments in the factory setup, extracting features from small and less-featured
-objects, dealing with colour variations between old and new bolts, achieving precise size
+objects, dealing with color variations between old and new bolts, achieving precise size
 estimation of small objects, and integrating the perception module with the
 robot.
 
@@ -253,7 +253,7 @@ properties~\citep{volpe1987artificial}, and potential-field formulations have si
 real-time multi-agent navigation in industrial environments~\citep{prajapati2026mppf}. For dual-arm
 systems, however, APF methods face unique challenges related to workspace sharing and coordinated
 manipulation in manufacturing contexts. Alternating master-slave paradigms with charged-surface
-workspace modelling have been employed for collision avoidance, but the sequential trajectory
+workspace modeling have been employed for collision avoidance, but the sequential trajectory
 planning approach lacks true coordination and may cause deadlocks in constrained
 workspaces~\citep{chuang2006priority}. Exponential-field variants developed for aerial navigation
 suffer from oscillations in complex obstacle environments~\citep{jayaweera2020dapf}. Hybrid
@@ -452,7 +452,7 @@ Unlike data-dependent IL and LfD, RL enables a robot to figure out optimal contr
 interaction and exploration with the surroundings. Although RL methods require extensive training
 time to converge, their capacity to learn optimal control robustly is often more reliable than
 static data-driven approaches, and by optimizing a well-defined reward function RL-based agents can
-potentially surpass the performance of human experts and develop resilient recovery behaviours that
+potentially surpass the performance of human experts and develop resilient recovery behaviors that
 are not represented in static datasets~\citep{gu2017deep}.
 
 Although single-arm manipulation based on RL has demonstrated promising results in trajectory
@@ -462,19 +462,19 @@ require collaborative manipulation rather than isolated single-arm execution. Ex
 single-agent to multi-agent systems poses significant challenges. In a single-agent environment, an
 agent is concerned only with the outcomes of its own actions within a stationary distribution.
 However, in multi-agent domains, an agent must account for both the consequences of its own actions
-and the evolving behaviours of other agents. This interaction introduces non-stationarity into the
+and the evolving behaviors of other agents. This interaction introduces non-stationarity into the
 learning process, as the optimal policy of one agent becomes dependent on the fluctuating strategies
 of its counterparts~\citep{nguyen2020deep}.
 
 Multi-Agent Reinforcement Learning (MARL) was introduced to address these challenges by explicitly
-modelling the interactions between multiple decision-making
+modeling the interactions between multiple decision-making
 entities~\citep{albrecht2024multi,low2025cooperative}. MARL methods are broadly classified along three primary axes, by cooperation structure, where
 agents may be fully cooperative sharing a joint reward, fully competitive in zero-sum settings, or
 mixed, by training and execution paradigm, spanning Independent Learning which treats other agents
 as part of a non-stationary environment~\citep{dewitt2020independent}, Centralized Training with
 Decentralized Execution (CTDE) which learns a shared critic while keeping independent policies at
 execution, and Centralized Learning, and by communication protocol, separating agents that
-explicitly share state or intent from those that must infer behaviour from observed actions. For
+explicitly share state or intent from those that must infer behavior from observed actions. For
 dual-arm manipulation, the problem is most effectively formulated as a fully
 cooperative decentralized partially observable Markov Decision Process (Dec-POMDP) under the CTDE
 paradigm~\citep{yu2022surprising}. While recent heterogeneous-agent CTDE methods such as
@@ -568,7 +568,7 @@ studies in this thesis.
     methods suffer from limitations in accuracy, speed, and adaptability while often requiring
     multiple sensors that increase system complexity and cost~\citep{sk2024bolthandling}. Classical
     localization is unreliable under varying light conditions, shapes, and
-    colours~\citep{sk2024boltsorting}.
+    colors~\citep{sk2024boltsorting}.
 
     \item[G2. Runtime arm selection from onboard perception.] Coordination has been addressed by
     control-level coupling, by centrally solved scheduling from an external view, or by offline
@@ -634,7 +634,7 @@ The contributions of this thesis, in the order the studies are developed, are as
 
 \begin{description}
     \item[C1. Vision-based bolt handling with RGB-D template matching.] $k$-means segmentation
-    with Oriented Chamfer matching on RGB-D point clouds for pose estimation, with colour-based
+    with Oriented Chamfer matching on RGB-D point clouds for pose estimation, with color-based
     segmentation, template matching and contour analysis for size estimation, achieving bolt sorting without misclassifications on overlapping bolts in Gazebo~\citep{sk2024bolthandling}.
 
     \item[C2. Deep-learning segmentation fused with classical vision.] A custom bolt dataset

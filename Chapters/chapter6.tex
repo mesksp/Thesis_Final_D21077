@@ -207,7 +207,7 @@ Cartesian velocity by a single scaling factor,
 \end{equation}
 so that the manipulator's kinematic state evolves as $\dot{x} = v = k_v\, \vec{f}_{\text{resultant}}(x)$
 for end-effector position $x \in \mathbb{R}^3$ and scalar $k_v = 1/s$, the closed-loop system whose
-behaviour Section~\ref{sec:iapf_validation} validates experimentally.
+behavior Section~\ref{sec:iapf_validation} validates experimentally.
 
 Orientation is controlled in parallel. The current end-effector orientation
 $\boldsymbol{\theta}_c = [\theta_{cx}, \theta_{cy}, \theta_{cz}] \in SO(3)$ comes from real-time
@@ -289,7 +289,7 @@ regime until the lock is released~\citep{surya2025iapf}.}
 The three-way force equilibrium of Section~\ref{sec:iapf_forces} and the hybrid twist controller of
 Section~\ref{sec:iapf_velocity} are validated directly on hardware rather than through a closed-form
 stability proof: the resultant force of Equation~\eqref{eq:iapf_resultant} is the commanded velocity
-itself, so its behaviour is exactly what repeated dual-arm trials show. The home-seeking term's
+itself, so its behavior is exactly what repeated dual-arm trials show. The home-seeking term's
 practical necessity is demonstrated experimentally by comparing the full three-way equilibrium
 against the classical two-way (attraction and repulsion only) formulation under an identical
 near-goal conflict.

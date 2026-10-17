@@ -20,7 +20,7 @@ coupled-reward PPO controller that maps instantaneous Cartesian pose error direc
 velocity commands, trained purely on static reachable poses, and shown to generalize zero-shot to
 four continuous trajectory geometries on real hardware, closing gap G6. That trained policy is then
 reused, frozen, as the single-arm prior inside Sections~\ref{sec:alpha_formulation}
-through~\ref{sec:alpha_results}, which present Gated Prior Composition (GPC), a hierarchical
+through~\ref{sec:alpha_results}, which present the prior guided policy, a hierarchical
 architecture that layers a learned multi-agent coordination policy on top of the frozen prior
 through a gating scalar co-trained with it from timestep zero, closing gap G7 without requiring the
 coordination policy to relearn reachability from scratch.
@@ -49,7 +49,7 @@ size of a discontinuity but not the branch change itself, and trades it for a tr
 lag~\citep{faroni2018predictive}; and trajectory smoothing or lookahead filtering suits pre-planned
 paths, while for online targets only causal smoothing or online trajectory generation is
 available~\citep{kroger2010line,macfarlane2003jerk}, which adds delay. The claims made in this part
-therefore concern the behaviour that remains after these standard mitigations are applied.
+therefore concern the behavior that remains after these standard mitigations are applied.
 Velocity-level controllers, resolved-rate motion control~\citep{whitney1969resolved}, damped least
 squares~\citep{wampler1986manipulator,chiaverini1994review}, and quadratic
 programming~\citep{zhang2013variable}, operate directly in the differential domain but require an
@@ -118,7 +118,7 @@ update~\citep{sk2025diktracking}.}
 %% ============================================================
 
 Training is conducted in NVIDIA Isaac Lab with a physics timestep of $\Delta t = 1/120$\,s and a
-control decimation of 2, giving a policy frequency of 60\,Hz. The Kinova Gen3 Lite is modelled as a
+control decimation of 2, giving a policy frequency of 60\,Hz. The Kinova Gen3 Lite is modeled as a
 USD asset with self-collisions enabled, and joints are velocity-controlled so the policy output maps
 directly to a joint command. The joint drive stiffness and damping of the articulation were
 calibrated against the physical robot: constant joint-velocity commands were applied in simulation
@@ -479,7 +479,7 @@ underperforms its sparse counterpart SAC-S, plateauing at $\approx 0.40$ against
 notably SAC-D, trained for nearly double SAC-S's step budget, remains well below it. This is
 consistent with, though not definitive proof of, a conflict between the maximum-entropy objective,
 which encourages exploratory joint motion, and the joint velocity penalty, which favors near-idle
-behaviour to minimize control effort at the expense of task progress. PPO-S stagnates almost
+behavior to minimize control effort at the expense of task progress. PPO-S stagnates almost
 immediately at $\approx 0.12$, confirming that without the dense, coupled reward shaping of
 Section~\ref{sec:dikppo_reward}, sparse terminal feedback alone is too infrequent for the policy to
 learn the precise joint coordination continuous trajectory tracking requires. Together these results
@@ -742,7 +742,7 @@ joint motion.
 
 Table~\ref{tab:dikppo_simresults} and Figures~\ref{fig:dikppo_circlecomp} and
 \ref{fig:dikppo_lissajouscomp} show that no single classical baseline is uniformly competitive, and
-the pattern of failure for each follows from its underlying mechanism rather than a tuning artefact.
+the pattern of failure for each follows from its underlying mechanism rather than a tuning artifact.
 TRAC-IK, seeded with its previous solution, achieves the lowest position RMSE on the circle
 (1.2\,mm) and lemniscate (1.07\,mm), since resolving each waypoint as an independent constrained
 optimization allows near-exact convergence at every individual pose in a noiseless simulation. But
@@ -752,7 +752,7 @@ with its smoothness index of 52--62, the largest of any method: about three time
 19 to 370 times that of TRPO-D, and three to four orders of magnitude above DLS, Velocity QP, and
 PPO-D. On the Lissajous curve, where curvature and orientation both vary, the nearest-seed
 assumption breaks down, and position RMSE degrades roughly 30-fold relative to the circle (1.2\,mm
-to 35.3\,mm). DLS's fixed-gain error-coupling strongly favours orientation correction on the circle,
+to 35.3\,mm). DLS's fixed-gain error-coupling strongly favors orientation correction on the circle,
 where required angular correction is small, giving the best orientation RMSE of any method there,
 but the same fixed gain cannot adaptively reallocate correction authority on the lemniscate, where
 orientation must vary continuously, and its orientation RMSE there is worse than PPO-D's on the
@@ -761,7 +761,7 @@ quadratic program with explicit joint-velocity bounds at every step. It attains 
 orientation RMSE of any method on the lemniscate and the Lissajous ($3.9\times10^{-3}$ and
 $8.6\times10^{-3}$\,rad) but does not lead in position on any curve (11.0--35.3\,mm), degrading on
 the Lissajous to a level comparable with TRAC-IK; this is consistent with the single fixed weighting
-of the combined pose error, shared with DLS, favouring the orientation channel. TRPO-D shares
+of the combined pose error, shared with DLS, favoring the orientation channel. TRPO-D shares
 PPO-D's coupled reward and on-policy structure, but its exact KL-divergence constraint leaves it
 less converged under an identical training budget (Table~\ref{tab:dikppo_wallclock}), producing both
 higher residual error and substantially worse smoothness than PPO-D on every curve. SAC-S settles at
@@ -879,7 +879,7 @@ SAC-S~\citep{haarnoja2018soft}   & Circle & 0.0450 & 0.0590 \\
 \end{table}
 
 Hardware trajectories use the same shapes, sizes, and speed as in simulation ($r = 0.15$\,m, side
-0.2\,m for the square, $\omega = 0.1$\,rad/s) centred at $[0.3, -0.1, 0.2]$\,m and execute at 20\,Hz.
+0.2\,m for the square, $\omega = 0.1$\,rad/s) centered at $[0.3, -0.1, 0.2]$\,m and execute at 20\,Hz.
 TRAC-IK, DLS, and SAC-S were each deployed on the circular trajectory
 (Figure~\ref{fig:dikppo_hwbaselines}), one representative per method family, while PPO-D was further
 evaluated on square, lemniscate, and 3-D Lissajous trajectories without any retraining
@@ -896,7 +896,7 @@ consistent with its damping factor being calibrated against an idealized simulat
 does not account for joint compliance and backlash on the physical hardware, though its orientation
 advantage on the circle persists on hardware since the constant-orientation condition producing it
 is preserved there too. SAC-S degrades $\approx 1.5$-fold (29\,mm to 45\,mm); its in-tolerance offset
-from simulation persists, and the additional error is attributed to unmodelled hardware effects.
+from simulation persists, and the additional error is attributed to unmodeled hardware effects.
 
 On the circle, the only trajectory run by every method on hardware, PPO-D is the only method whose
 position error did not increase from simulation to hardware: 6.3\,mm on hardware against 9.95\,mm
@@ -939,7 +939,7 @@ frequency and of training action noise were not ablated. The evaluation covers f
 geometries at a single spatial scale, within a localized workspace region, from a fixed initial
 configuration, at 0.05--0.3\,rad/s in simulation and 0.1\,rad/s on hardware; generalization to other
 scales, wider workspace regions, or randomized initial states remains untested. Hardware baseline
-comparison was restricted to the circle. Behaviour near kinematic singularities is uncharacterized,
+comparison was restricted to the circle. Behavior near kinematic singularities is uncharacterized,
 the policy has no formal stability or safety guarantee (velocity clipping bounds only command
 magnitude; energy-based approaches such as passivity-based control, which monitor the energy
 exchanged with the environment, can offer such guarantees~\citep{khan2025quantum}), and latency,
@@ -954,7 +954,7 @@ or passivity-based filter~\citep{khan2025quantum}.
 %% PART II
 %% ================================================================
 \section*{Part II: Prior-Guided Policy Learning for Cooperative Dual-Arm Pre-Assembly Alignment}
-\addcontentsline{toc}{section}{Part II: GPC, Gated Prior Composition for Cooperative Dual-Arm Alignment}
+\addcontentsline{toc}{section}{Part II: Prior Guided Policy for Cooperative Dual-Arm Alignment}
 
 %% ============================================================
 \section{From a Single-Arm Prior to Dual-Arm Coordination}\label{sec:alpha_formulation}
@@ -1010,7 +1010,7 @@ alignment target provided to either agent.
 \includegraphics[width=\linewidth]{Images/alpha/Fig_1.jpg}
 % \caption{ALPHA architecture for cooperative dual-arm pre-assembly alignment: a frozen single-arm
 % DIK-PPO prior (lock symbol) and a MAPPO coordination policy (unlock symbol) are combined through the adaptive blending coefficient $\alpha_t^i$~\citep{sk2026priorguided}.}
-\caption{GPC architecture for cooperative dual-arm pre-assembly alignment under the CTDE paradigm. The frozen PPO base policy (top) independently outputs a per-arm reaching action $\mathbf{b}_t^i$ from local observations; the MAPPO actor-critic (bottom) outputs a coordination correction $\mathbf{m}_t^i$ and a blending increment from the 47-D local observation, with each agent's critic conditioned on the shared 92-D global state $S_t$. The two actions are combined per Eq.~(\ref{eq:alpha_combined}) into the joint velocity command executed by each arm.}
+\caption{Prior guided policy architecture for cooperative dual-arm pre-assembly alignment under the CTDE paradigm. The frozen PPO base policy (top) independently outputs a per-arm reaching action $\mathbf{b}_t^i$ from local observations; the MAPPO actor-critic (bottom) outputs a coordination correction $\mathbf{m}_t^i$ and a blending increment from the 47-D local observation, with each agent's critic conditioned on the shared 92-D global state $S_t$. The two actions are combined per Eq.~(\ref{eq:alpha_combined}) into the joint velocity command executed by each arm.}
 \label{fig:alpha_architecture}
 \end{figure}
 
@@ -1261,7 +1261,7 @@ matching the domain-randomization pattern already used for the base policy in
 Equation~\eqref{eq:dikppo_actionnoise}. Because the current $\alpha_t^i$, the base action
 $\mathbf{b}_t^i$, and the previous coordination action are all included in both the local
 observation and the global critic state, the full pipeline closes a temporal information loop: both
-actor and critic condition their next decision on the recent history of blending behaviour, forming
+actor and critic condition their next decision on the recent history of blending behavior, forming
 a closed-loop adaptive control structure over the blending coefficient itself, illustrated
 empirically in Figure~\ref{fig:alpha_evolution} in Section~\ref{sec:alpha_results}.
 
@@ -1329,7 +1329,7 @@ bound does not measurably constrain how quickly the policy can shift its relianc
 
 \begin{proposition}[Bounded Deviation from the Prior]\label{prop:boundeddeviation}
 For fixed $\alpha_t^i$, the reachable command set is $\mathcal{U}(\alpha_t^i) = \alpha_t^i \mathbf{b}_t^i +
-(1-\alpha_t^i)[-1,1]^6$, a box of half-width $(1-\alpha_t^i)$ centred at $\alpha_t^i \mathbf{b}_t^i$;
+(1-\alpha_t^i)[-1,1]^6$, a box of half-width $(1-\alpha_t^i)$ centered at $\alpha_t^i \mathbf{b}_t^i$;
 equivalently $\|\mathbf{u}_t^i - \alpha_t^i \mathbf{b}_t^i\|_\infty \le 1 - \alpha_t^i$. At the cap
 $\alpha_t^i=0.8$, the executed command is confined within 0.2 of the scaled prior.
 \end{proposition}
@@ -1461,7 +1461,7 @@ completed the reach phase.
 \begin{table}[htbp]
 \centering
 \caption{Evaluation results over 10 trials across 4096 parallel environments (mean $\pm$ std),
-comparing GPC against pure MARL algorithms and fixed blending
+comparing the prior guided policy against pure MARL algorithms and fixed blending
 ratios~\citep{sk2026priorguided}. All methods were trained under a single seed (42) and evaluated over 10
 independent trials, so the reported deviations characterize evaluation variance at fixed
 initialization; seed-level variance for the proposed method is reported in
@@ -1488,10 +1488,10 @@ complexity cost of learning reachability and coordination together. Pure MAPPO r
 reach success (71.6\%) but collapses to 8.3\% alignment, since learning low-level reachability and
 high-level alignment simultaneously under a single joint reward degrades sample efficiency sharply.
 IPPO, despite being blind to the partner agent's state, achieves higher absolute alignment (25.0\%)
-than MAPPO, indicating that decentralized critics encourage more conservative per-arm behaviour that
+than MAPPO, indicating that decentralized critics encourage more conservative per-arm behavior that
 reduces interference during fine alignment, at the direct cost of coordination quality. HAPPO
 reaches the highest reach success among MARL baselines (73.6\%), yet its alignment success (32.3\%)
-and conditional success (43.9\%) remain well below GPC. It retains a centralized critic with global
+and conditional success (43.9\%) remain well below the prior guided policy. It retains a centralized critic with global
 state access, but its sequential per-agent update, the mechanism providing its monotonic-improvement
 guarantee, computes one agent's advantage against a shifted joint policy for the other, directly
 disrupting the simultaneous convergence bilateral alignment demands.
@@ -1559,13 +1559,13 @@ PPO + HAPPO~\citep{kuba2021trust} & 92$\pm$0.2 & 87$\pm$0.4 & 94.60$\pm$0.5\\
 \label{tab:seed_robustness}
 \end{table}
 
-GPC was trained under three independent seeds (42, 100, 200), each evaluated with the protocol used for
-all other methods (Table~\ref{tab:seed_robustness}). Across seeds, GPC attains 95.92$\pm$0.58\% reach,
+The prior guided policy was trained under three independent seeds (42, 100, 200), each evaluated with the protocol used for
+all other methods (Table~\ref{tab:seed_robustness}). Across seeds, the prior guided policy attains 95.92$\pm$0.58\% reach,
 93.86$\pm$1.07\% alignment, and 97.86$\pm$0.53\% relative success. The across-seed deviation exceeds
 the within-seed evaluation deviation on every metric (1.07\% against 0.42--0.49\% on alignment),
 isolating initialization as a small but measurable variance component. Relative success varies least,
 by 0.95\% against 1.14\% and 2.04\% for reach and alignment, localizing seed sensitivity to the
-approach phase and indicating that the learned coordination behaviour is near
+approach phase and indicating that the learned coordination behavior is near
 initialization-invariant. The 6.9-point alignment margin over PPO+HAPPO (adaptive) spans
 approximately six across-seed deviations and is therefore not attributable to seed variation.
 
@@ -1583,7 +1583,7 @@ fixed-ratio baselines (Table~\ref{tab:alpha_baseline}) and shows seed variance o
 adaptive method (0.18\% against 0.58\%), consistent with the frozen prior alone driving single-arm
 approach regardless of the gating head's training status. Alignment success, by contrast, exhibits a
 9.69\% across-seed deviation, roughly nine times the adaptive variant's 1.07\%, indicating that
-whether the untrained head's fixed random projection happens to route the blend favourably during the
+whether the untrained head's fixed random projection happens to route the blend favorably during the
 coordination phase is left to initialization rather than resolved by learning. This asymmetry, tight
 reach variance paired with wide alignment variance, localizes the cost of an untrained $\alpha_t^i$
 to the phase requiring active suppression of the prior. It is itself evidence against the
@@ -1612,7 +1612,7 @@ both metrics, rather than diverge sharply on one.
 % \end{table}
 
 Table~\ref{tab:alpha_ablation} and Figure~\ref{fig:alpha_ablation} isolate the individual
-contributions of adaptive blending, centralized training, and the warm-up curriculum. GPC achieves
+contributions of adaptive blending, centralized training, and the warm-up curriculum. The prior guided policy achieves
 the highest performance across every metric (96.5\% reach, 95.0\% alignment, 98.45\% relative
 success), confirming that adaptive $\alpha_t^i$ combined with CTDE is the strongest configuration.
 Replacing MAPPO with IPPO under the identical adaptive blending mechanism drops alignment to 62.5\%,
@@ -1626,7 +1626,7 @@ residual 8-point alignment gap at this seed therefore isolates the cost of seque
 updates in a task demanding simultaneous bilateral convergence, rather than any difference in critic
 observability. The warm-up variant, which freezes $\alpha_t^i$ at zero for the
 first 150k timesteps before enabling adaptive blending, reaches 85.8\% alignment, underperforming
-GPC by $\approx 9$ points despite eventually reaching the same adaptive mechanism, its reward curve
+the prior guided policy by $\approx 9$ points despite eventually reaching the same adaptive mechanism, its reward curve
 in Figure~\ref{fig:alpha_ablation} shows a pronounced dip and delayed recovery around the transition
 point, indicating that introducing blending abruptly after a pure-MAPPO warm-up disrupts an already
 established policy in a way that co-adapting from timestep zero avoids.
@@ -1669,15 +1669,15 @@ its own frame while receiving the right arm's errors transformed into the left f
 for the right arm, producing distinct error magnitudes and gradient signals at the phase transition
 even under identical task conditions. This per-agent asymmetry is a direct consequence of the
 decentralized execution structure under CTDE, where each actor conditions on a locally framed 47-D
-observation rather than a 92-D shared global representation. GPC shows the shallowest and shortest dip
+observation rather than a 92-D shared global representation. The prior guided policy shows the shallowest and shortest dip
 on both arms, recovering fastest due to the centralized critic's global coordination signal, while
 PPO+IPPO exhibits a deeper, oscillatory dip, since decentralized critics cannot resolve the coupled
 bilateral alignment without global state access. Warm-up MAPPO shows a prolonged depression with
 delayed right-arm recovery, consistent with the reward instability in Figure~\ref{fig:alpha_ablation}:
 abrupt blending introduction after the 150k freeze disrupts co-adapted gating and coordination
-behaviours, and the right arm recovers more slowly due to its geometrically distinct workspace
+behaviors, and the right arm recovers more slowly due to its geometrically distinct workspace
 position relative to the alignment convergence point. PPO+HAPPO exhibits the deepest dip across both
-arms at the phase transition. The $\alpha$-detached control's post-transition behaviour is
+arms at the phase transition. The $\alpha$-detached control's post-transition behavior is
 seed-dependent rather than consistently unresolved, yet its alignment success remains far below the
 adaptive variant on every seed, including the one whose trajectory most resembles it. This
 dissociation between trajectory appearance and task outcome, together with the 9.69\% across-seed
@@ -1749,7 +1749,7 @@ successfully, one fails only at final insertion due to an object slip after a su
 grasp, and two fail during the grasp itself due to a gripper fault, giving 93.3\% reach success and
 90.0\% overall alignment success (96.4\% alignment success conditioned on a successful reach). Since
 the simulation-only snap mechanism of Equation~\eqref{eq:alpha_snap} is entirely absent from the
-hardware deployment, this 90\% success confirms directly that the learned coordination behaviour
+hardware deployment, this 90\% success confirms directly that the learned coordination behavior
 that produces reliable bilateral alignment is encoded in the trained policy weights, not in the
 reward structure or snap mechanism used to train them, exactly the claim gap G7 required to be
 demonstrated rather than assumed.
@@ -1758,7 +1758,7 @@ demonstrated rather than assumed.
 \subsection{Discussion}\label{sec:alpha_discussion}
 %% ------------------------------------------------------------
 
-GPC hierarchically composes a frozen single-arm reaching prior with a MAPPO coordination policy
+The prior guided policy hierarchically composes a frozen single-arm reaching prior with a MAPPO coordination policy
 through the adaptive gating scalar $\alpha_t^i$, allowing the blending mechanism and coordination
 policy to co-evolve from timestep zero. The centralized 92-D critic provides the bilateral
 coordination signal that neither fixed-blend variants nor decentralized IPPO critics can replicate.
@@ -1775,10 +1775,10 @@ appended directly to $\mathbf{s}^i_t$ and $S_t$.
 
 \paragraph{Prior dependence.} A poor prior is not structurally locked in: $\mathbf{m}_t^i$ is a free
 actor output, not a residual on $\mathbf{b}_t^i$, so MAPPO can counteract prior bias directly,
-independent of $\alpha_t^i$. The cap also favours the learned side, not the prior's: $\alpha_t^i \in
+independent of $\alpha_t^i$. The cap also favors the learned side, not the prior's: $\alpha_t^i \in
 [0,0.8]$ bounds the \emph{prior's} share, guarantees the coordination policy at least 20\% weight, and
 permits $\alpha_t^i = 0$ (Proposition~\ref{prop:boundeddeviation}). The real cost is narrower:
-cancelling a bad prior spends part of $\mathbf{m}_t^i$'s budget, and the rate limit keeps $\alpha_t^i$
+canceling a bad prior spends part of $\mathbf{m}_t^i$'s budget, and the rate limit keeps $\alpha_t^i$
 from reaching zero faster than $\approx$16 steps (Propositions~\ref{prop:ratelimit}
 and~\ref{prop:nonrestrictive}). The fixed $\alpha_t^i = 0.9$ baseline shows this failure mode directly:
 reach falls to 1.76\% and alignment to 0.02\% despite high reward (Table~\ref{tab:alpha_baseline}). No
@@ -1786,7 +1786,7 @@ capacity-parity claim is made against an unconstrained MAPPO actor
 (Proposition~\ref{prop:boundeddeviation}), and whether this trade costs more on tasks demanding larger
 deviations remains untested.
 
-\paragraph{Perception and pose.} Object pose is assumed known a priori. The GPC policy consumes only
+\paragraph{Perception and pose.} Object pose is assumed known a priori. The prior guided policy consumes only
 proprioceptive observations, so a vision or pose-estimation module would make the system
 perception-complete without modifying the learned policy or reward structure. Object geometry is
 likewise not observed by the policy; evaluation on unseen peg and hole shapes or dimensions would
@@ -1861,7 +1861,7 @@ it.
 \item \textbf{Baseline hyperparameters matched rather than tuned per method.} All baselines share the
 configuration of Table~\ref{tab:alpha_hyper}, as is common practice in recent MARL benchmarking, which
 typically employs per-algorithm, per-task hyperparameter search~\citep{xie2026multi}. This avoids
-favouring any single method through selective tuning, but the reported baseline performance may not
+favoring any single method through selective tuning, but the reported baseline performance may not
 reflect each algorithm's individually optimal configuration; the training cost per run made an
 independent per-algorithm search infeasible within the scope of this work.
 \item \textbf{Asymmetric seeding.} The proposed method and the $\alpha$-detached control are each
@@ -1876,7 +1876,7 @@ optimization) to a comparable standard for this task is a separate undertaking, 
 claim relative to classical dual-arm control is made.
 \end{itemize}
 
-In summary, GPC composes a frozen single-arm reaching prior with a MAPPO coordination policy through
+In summary, the prior guided policy composes a frozen single-arm reaching prior with a MAPPO coordination policy through
 a learned adaptive gating scalar output as a seventh action dimension. Joint training of
 coordination and gating from timestep zero under CTDE with a 92-D global critic achieves 95.9\%
 reach and 93.9\% alignment (mean over three training seeds) across 4096 parallel simulation

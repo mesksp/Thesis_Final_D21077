@@ -78,7 +78,7 @@ seen so far in the current evaluation window,
 S_\alpha = (d^*, O^*) \text{ or } \varnothing,
 \label{eq:cta_store}
 \end{equation}
-and a new proposal replaces the stored target according to a competitive update rule that favours
+and a new proposal replaces the stored target according to a competitive update rule that favors
 the new candidate unless the stored one is already meaningfully closer:
 \begin{equation}
 \gamma_{\text{upd}}(d_{\text{new}}, d_{\text{prev}}) =
@@ -256,7 +256,7 @@ allocation and the refined scaling of this section, the same qualitative compari
 Chapter~\ref{chap:iapf} established for the fixed-assignment case: the traditional APF's trajectory
 deviates sharply when the repulsive force spikes at close range, while iAPF remains smooth,
 confirming that neither the switch to competitive allocation nor the two-stage scaling refinement
-disturbs the stable behaviour validated in Section~\ref{sec:iapf_validation}.
+disturbs the stable behavior validated in Section~\ref{sec:iapf_validation}.
 
 %% ============================================================
 \section{Experimental Validation and Results}\label{sec:cta_results}
@@ -374,7 +374,7 @@ to home, with zero collision events~\citep{sk2025competitive}.}
 
 Table~\ref{tab:cta_heterogeneous} reports mixed-object trials, twelve objects per trial (six nuts,
 six bolts) in a compact arrangement, comparing all four strategies. The original fixed allocation
-reports the highest average velocity, but this is an artefact of partial coverage
+reports the highest average velocity, but this is an artifact of partial coverage
 ($\approx 55\%$): its type-constrained arms complete only the subset of objects within their own
 reachable, high-density zone and leave the rest unassigned, rather than genuinely outperforming the
 alternatives. Among the methods achieving full coverage ($>89\%$), the proposed method
@@ -431,7 +431,7 @@ G5 as a coherent progression rather than three independent contributions: Chapte
 supplies the continuous, sensor-free distance signal; Chapter~\ref{chap:iapf} establishes a stable,
 empirically validated motion-planning controller under the simplifying assumption of a fixed
 object-to-arm convention; and this chapter removes exactly that assumption, replacing it with
-runtime competitive allocation while carrying the stable behaviour validated in
+runtime competitive allocation while carrying the stable behavior validated in
 Section~\ref{sec:iapf_validation} forward unchanged. Chapter~\ref{chap:learned_control} turns from
 this reactive, analytically defined controller to learning-based control, addressing gaps G6 and G7
 for continuous trajectory tracking on a non-spherical wrist and for sample-efficient dual-arm
