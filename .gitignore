@@ -1,3 +1,6 @@
 # Local-only files
 presentation/
 token.txt
+.claude/
+papers/Revised_4.pdf
+papers/Revised_4/
